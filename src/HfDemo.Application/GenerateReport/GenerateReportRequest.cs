@@ -9,6 +9,4 @@ public class GenerateReportRequest : IRequest<GenerateReportResponse>
     public DateTime AsOfDate { get; set; }
 
     public string[] AdditionalData { get; set; } = Array.Empty<string>();
-
-    public string Status { get; set; } = string.Empty;
 }

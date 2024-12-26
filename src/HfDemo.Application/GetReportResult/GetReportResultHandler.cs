@@ -1,9 +1,5 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HfDemo.Application.Domain;
+using MediatR;
 
 namespace HfDemo.Application.GetReportResult
 {
@@ -11,7 +7,20 @@ namespace HfDemo.Application.GetReportResult
     {
         public Task<GetReportResultResponse> Handle(GetReportResultRequest request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var reportInfo = ReportInfoRepository.Get(request.ReportId);
+
+            if (reportInfo == null)
+            {
+                return Task.FromResult(GetReportResultResponse.EmptyResult);
+            }
+
+            var response = new GetReportResultResponse()
+            {
+                ReportId = reportInfo.ReportId,
+                ReportResult = reportInfo.Result
+            };
+
+            return Task.FromResult(response);
         }
     }
 }

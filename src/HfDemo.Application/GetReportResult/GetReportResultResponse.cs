@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace HfDemo.Application.GetReportResult;
 
-namespace HfDemo.Application.GetReportResult;
-
-internal class GetReportResultResponse
+public class GetReportResultResponse
 {
+    public static readonly GetReportResultResponse EmptyResult = new()
+    {
+        ReportId = Guid.Empty,
+        ReportResult = string.Empty,
+    };
+
+    public Guid ReportId { get; set; }
+
+    public string ReportResult { get; set; } = string.Empty;
 }

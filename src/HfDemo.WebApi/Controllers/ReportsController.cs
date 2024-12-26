@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Concurrent;
+﻿using HfDemo.Application.GenerateReport;
+using HfDemo.Application.GetReportResult;
+using HfDemo.Application.GetReportStatus;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HfDemo.WebApi.Controllers;
 
@@ -7,46 +10,59 @@ namespace HfDemo.WebApi.Controllers;
 [ApiController]
 public class ReportsController : ControllerBase
 {
-    private static readonly ConcurrentDictionary<Guid, GenerateReportParams> _reports = new ConcurrentDictionary<Guid, GenerateReportParams>();
+    private readonly IMediator _mediator;
 
-    [HttpGet("{id:guid}")]
-    public IActionResult Get(Guid id)
+    public ReportsController(IMediator mediator)
     {
-        if (_reports.TryGetValue(id, out var report))
-        { 
-            return Ok(report); 
-        }
-
-        return NotFound();
+        _mediator = mediator;
     }
 
-    [HttpPut("{id:guid}/status")]
-    public IActionResult Put(Guid id, [FromBody] string status) 
+    [HttpGet("{id:guid}/status")]
+    public async Task<IActionResult> GetStatus(Guid id)
     {
-        if (_reports.TryGetValue(id, out var report))
+        var request = new GetReportStatusRequest()
         {
-            report.Status = status;
-            return Ok(report);
-        }
+            ReportId = id
+        };
 
-        return NotFound();
+        var res = await _mediator.Send(request);
+
+        return Ok(res); 
+    }
+
+    [HttpGet("{id:guid}/result")]
+    public async Task<IActionResult> GetResult(Guid id)
+    {
+        var request = new GetReportResultRequest()
+        {
+            ReportId = id
+        };
+
+        var res = await _mediator.Send(request);
+
+        return Ok(res); 
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] GenerateReportParams request) 
+    public async Task<IActionResult> Post([FromBody] GenerateReportParams request) 
     {
         var newId = Guid.NewGuid();
-        _reports.TryAdd(newId, request);
-        return Ok(newId);
+
+        var generateRequest = new GenerateReportRequest
+        {
+            ReportId = newId,
+            AsOfDate = request.AsOfDate,
+            AdditionalData = request.AdditionalData,
+        };
+
+        var res = await _mediator.Send(generateRequest);
+
+        return Ok(res);
     }
 }
 
 public record GenerateReportParams
 {
-    public string Status { get; set; } = string.Empty;
-    
-    public Guid ReportId { get; set; }
-
     public DateTime AsOfDate { get; set; }
 
     public string[] AdditionalData { get; set; } = Array.Empty<string>();

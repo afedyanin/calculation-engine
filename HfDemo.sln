@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{29D13B89
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HfDemo.WebApi", "src\HfDemo.WebApi\HfDemo.WebApi.csproj", "{1F85ADE8-A69E-44E7-9289-2238CF33A523}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HfDemo.Application", "src\HfDemo.Application\HfDemo.Application.csproj", "{30F1E599-5F8B-4CCE-BB14-7759CABDB881}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HfDemo.Application", "src\HfDemo.Application\HfDemo.Application.csproj", "{30F1E599-5F8B-4CCE-BB14-7759CABDB881}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

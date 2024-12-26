@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HfDemo.Application.Domain;
 
 namespace HfDemo.Application.GenerateReport;
 
@@ -10,5 +6,5 @@ public class GenerateReportResponse
 {
     public Guid ReportId { get; set; }
 
-    public string Status { get; set; } = string.Empty;
+    public ReportStatus Status { get; set; }
 }

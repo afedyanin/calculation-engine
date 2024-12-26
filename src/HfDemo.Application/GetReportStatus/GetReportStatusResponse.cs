@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HfDemo.Application.Domain;
 
-namespace HfDemo.Application.ReportStatus;
+namespace HfDemo.Application.GetReportStatus;
 
 public class GetReportStatusResponse
 {
+    public static readonly GetReportStatusResponse EmptyStatus = new()
+    {
+        ReportId = Guid.Empty,
+        Status = ReportStatus.Unknown,
+    };
+
     public Guid ReportId { get; set; }
 
-    public string Status { get; set; } = string.Empty;
+    public ReportStatus Status { get; set; }
 }
