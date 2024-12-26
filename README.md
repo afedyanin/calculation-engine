@@ -6,6 +6,6 @@ HangFire ASP.NET Host with npgsql
 
 - [Hangfire](https://github.com/HangfireIO/Hangfire)
 - [Hangfire.PostgreSql](https://github.com/hangfire-postgres/Hangfire.PostgreSql)
-- [Обзор библиотек для Hangfire](https://habr.com/ru/articles/764690/)
+- [РћР±Р·РѕСЂ Р±РёР±Р»РёРѕС‚РµРє РґР»СЏ Hangfire](https://habr.com/ru/articles/764690/)
 
 
