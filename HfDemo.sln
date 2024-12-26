@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{29D13B89
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HfDemo.WebApi", "src\HfDemo.WebApi\HfDemo.WebApi.csproj", "{1F85ADE8-A69E-44E7-9289-2238CF33A523}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HfDemo.Application", "src\HfDemo.Application\HfDemo.Application.csproj", "{30F1E599-5F8B-4CCE-BB14-7759CABDB881}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,12 +26,17 @@ Global
 		{1F85ADE8-A69E-44E7-9289-2238CF33A523}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F85ADE8-A69E-44E7-9289-2238CF33A523}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F85ADE8-A69E-44E7-9289-2238CF33A523}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30F1E599-5F8B-4CCE-BB14-7759CABDB881}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30F1E599-5F8B-4CCE-BB14-7759CABDB881}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30F1E599-5F8B-4CCE-BB14-7759CABDB881}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30F1E599-5F8B-4CCE-BB14-7759CABDB881}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1F85ADE8-A69E-44E7-9289-2238CF33A523} = {9740CDE7-1499-4015-8D34-52B47F85626E}
+		{30F1E599-5F8B-4CCE-BB14-7759CABDB881} = {9740CDE7-1499-4015-8D34-52B47F85626E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {112446CA-3E13-4E65-B702-CEA58E2762B3}

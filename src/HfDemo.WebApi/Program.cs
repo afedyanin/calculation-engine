@@ -6,6 +6,7 @@ using Hangfire.Server;
 using Hangfire.States;
 using HfDemo.WebApi.JobManagement;
 using Hangfire.Common;
+using HfDemo.Application;
 
 namespace HfDemo.WebApi;
 
@@ -18,6 +19,8 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        builder.Services.AddApplication();
 
         builder.Services.AddSingleton<IBackgroundJobFactory>(x => new CustomBackgroundJobFactory(
             new BackgroundJobFactory(x.GetRequiredService<IJobFilterProvider>())));
