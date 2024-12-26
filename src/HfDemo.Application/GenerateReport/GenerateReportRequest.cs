@@ -2,7 +2,7 @@
 
 namespace HfDemo.Application.GenerateReport;
 
-public class GenerateReportRequest : IRequest<GenerateReportResponse>
+public class GenerateReportRequest : IRequest
 {
     public Guid ReportId { get; set; }
 

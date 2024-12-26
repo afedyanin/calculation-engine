@@ -59,7 +59,7 @@ public class ReportsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] GenerateReportParams request) 
+    public IActionResult Post([FromBody] GenerateReportParams request) 
     {
         var generateRequest = new GenerateReportRequest
         {
@@ -68,7 +68,7 @@ public class ReportsController : ControllerBase
             AdditionalData = request.AdditionalData,
         };
 
-        var jobId = _backgroundJobs.Enqueue(() => { _mediator.Send(generateRequest); });
+        var jobId = _backgroundJobs.Enqueue(() => _mediator.Send(generateRequest, CancellationToken.None));
 
         return Ok(jobId);
     }

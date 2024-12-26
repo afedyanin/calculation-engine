@@ -3,9 +3,9 @@ using MediatR;
 
 namespace HfDemo.Application.GenerateReport;
 
-internal class GenerateReportHandler : IRequestHandler<GenerateReportRequest, GenerateReportResponse>
+internal class GenerateReportHandler : IRequestHandler<GenerateReportRequest>
 {
-    public async Task<GenerateReportResponse> Handle(GenerateReportRequest request, CancellationToken cancellationToken)
+    public async Task Handle(GenerateReportRequest request, CancellationToken cancellationToken)
     {
         var reportInfo = new ReportInfo 
         { 
@@ -17,17 +17,11 @@ internal class GenerateReportHandler : IRequestHandler<GenerateReportRequest, Ge
 
         ReportInfoRepository.Upsert(reportInfo);
 
-        var response = new GenerateReportResponse
-        {
-            ReportId = reportInfo.ReportId,
-            Status = reportInfo.Status,
-        };
-
         reportInfo.Result = "Initialize calulation\n";
         reportInfo.Status = ReportStatus.InProgress;
         ReportInfoRepository.Upsert(reportInfo);
 
-        for (int i = 0; i<=100; i++)
+        for (int i = 0; i <= 100; i++)
         {
             reportInfo.Result += $"Processing step #{i}\n";
             ReportInfoRepository.Upsert(reportInfo);
@@ -35,6 +29,7 @@ internal class GenerateReportHandler : IRequestHandler<GenerateReportRequest, Ge
             await Task.Delay(1000);
         }
 
-        return response;
+        reportInfo.Status = ReportStatus.Success;
+        ReportInfoRepository.Upsert(reportInfo);
     }
 }
