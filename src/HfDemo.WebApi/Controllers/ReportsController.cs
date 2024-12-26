@@ -1,4 +1,6 @@
-﻿using HfDemo.Application.GenerateReport;
+﻿using Hangfire;
+using HfDemo.Application.Domain;
+using HfDemo.Application.GenerateReport;
 using HfDemo.Application.GetReportResult;
 using HfDemo.Application.GetReportStatus;
 using MediatR;
@@ -11,10 +13,23 @@ namespace HfDemo.WebApi.Controllers;
 public class ReportsController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IBackgroundJobClient _backgroundJobs;
 
-    public ReportsController(IMediator mediator)
+    public ReportsController(
+        IMediator mediator,
+        IBackgroundJobClient backgroundJobs)
     {
         _mediator = mediator;
+        _backgroundJobs = backgroundJobs;
+    }
+
+    // TODO: Remove it
+    [HttpGet]
+    public IActionResult Get()
+    {
+        var res = ReportInfoRepository.Get();
+
+        return Ok(res);
     }
 
     [HttpGet("{id:guid}/status")]
@@ -46,23 +61,23 @@ public class ReportsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] GenerateReportParams request) 
     {
-        var newId = Guid.NewGuid();
-
         var generateRequest = new GenerateReportRequest
         {
-            ReportId = newId,
+            ReportId = request.ReportId,
             AsOfDate = request.AsOfDate,
             AdditionalData = request.AdditionalData,
         };
 
-        var res = await _mediator.Send(generateRequest);
+        var jobId = _backgroundJobs.Enqueue(() => { _mediator.Send(generateRequest); });
 
-        return Ok(res);
+        return Ok(jobId);
     }
 }
 
 public record GenerateReportParams
 {
+    public Guid ReportId { get; set; }
+
     public DateTime AsOfDate { get; set; }
 
     public string[] AdditionalData { get; set; } = Array.Empty<string>();

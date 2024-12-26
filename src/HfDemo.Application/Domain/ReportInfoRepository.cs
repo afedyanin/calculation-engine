@@ -2,9 +2,14 @@
 
 namespace HfDemo.Application.Domain
 {
-    internal static class ReportInfoRepository
+    public static class ReportInfoRepository
     {
         private static readonly ConcurrentDictionary<Guid, ReportInfo> _reports = new ConcurrentDictionary<Guid, ReportInfo>();
+
+        public static ReportInfo[] Get()
+        {
+            return _reports.Values.ToArray();
+        }
 
         public static ReportInfo? Get(Guid reportId)
         {

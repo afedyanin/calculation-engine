@@ -5,7 +5,7 @@ namespace HfDemo.Application.GenerateReport;
 
 internal class GenerateReportHandler : IRequestHandler<GenerateReportRequest, GenerateReportResponse>
 {
-    public Task<GenerateReportResponse> Handle(GenerateReportRequest request, CancellationToken cancellationToken)
+    public async Task<GenerateReportResponse> Handle(GenerateReportRequest request, CancellationToken cancellationToken)
     {
         var reportInfo = new ReportInfo 
         { 
@@ -23,9 +23,18 @@ internal class GenerateReportHandler : IRequestHandler<GenerateReportRequest, Ge
             Status = reportInfo.Status,
         };
 
-        // TODO: Emulate report calculation
+        reportInfo.Result = "Initialize calulation\n";
+        reportInfo.Status = ReportStatus.InProgress;
+        ReportInfoRepository.Upsert(reportInfo);
 
+        for (int i = 0; i<=100; i++)
+        {
+            reportInfo.Result += $"Processing step #{i}\n";
+            ReportInfoRepository.Upsert(reportInfo);
 
-        return Task.FromResult(response);
+            await Task.Delay(1000);
+        }
+
+        return response;
     }
 }
