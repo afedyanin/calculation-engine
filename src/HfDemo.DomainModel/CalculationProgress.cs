@@ -1,6 +1,8 @@
-﻿namespace HfDemo.DomainModel;
+using HfDemo.Contracts.Entities;
 
-public class CalculationProgress
+namespace HfDemo.DomainModel;
+
+public class CalculationProgress : IJobProgress
 {
     public Guid Id { get; set; }
 

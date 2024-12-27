@@ -1,6 +1,6 @@
 # 2024-12-27
 - Admin API for Job Management
-
+- EFCore - DB Code First
 
 # 2024-12-26
 

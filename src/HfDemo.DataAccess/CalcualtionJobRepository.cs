@@ -1,9 +1,10 @@
-﻿using HfDemo.DomainModel;
+﻿using HfDemo.Contracts.Services;
+using HfDemo.DomainModel;
 using HfDemo.DomainModel.Abstractions;
 
 namespace HfDemo.DataAccess;
 
-public class CalcualtionJobRepository : ICalculationJobRepository
+public class CalcualtionJobRepository : IJobRepository
 {
     public CalculationJob GetById(Guid id)
     {

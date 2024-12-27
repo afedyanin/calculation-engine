@@ -1,12 +1,15 @@
+using HfDemo.Contracts.Abstractions;
+using HfDemo.Contracts.Entities;
+
 namespace HfDemo.DomainModel;
 
-public class CalculationJob
+public class CalculationJob : IJob
 {
-    private readonly List<CalculationProgress> _progress = [];
+    private readonly List<IJobProgress> _progress = [];
 
-    private readonly List<CalculationJob> _children = [];
+    private readonly List<IJob> _children = [];
 
-    private readonly List<CalculationResult> _results = [];
+    private readonly List<IJobResult> _results = [];
 
     public Guid Id { get; set; }
 
@@ -24,11 +27,11 @@ public class CalculationJob
 
     public string ParametersJson { get; set; } = string.Empty;
 
-    public IEnumerable<CalculationJob> ChildJobs => _children.AsReadOnly();
+    public IEnumerable<IJob> ChildJobs => _children.AsReadOnly();
 
-    public IEnumerable<CalculationProgress> Progress => _progress.AsReadOnly();
+    public IEnumerable<IJobProgress> Progress => _progress.AsReadOnly();
 
-    public IEnumerable<CalculationResult> Results => _results.AsReadOnly();
+    public IEnumerable<IJobResult> Results => _results.AsReadOnly();
 
 
     public void AppendProgress(int percent, string? message = null)

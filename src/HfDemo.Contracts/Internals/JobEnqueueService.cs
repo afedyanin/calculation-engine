@@ -1,14 +1,15 @@
 using Hangfire;
+using HfDemo.Contracts.Services;
 using MediatR;
 
 namespace HfDemo.Contracts.Internals;
 
-internal class CalculationJobEnqueueService : ICalculationJobEnqueueService
+internal class JobEnqueueService : IJobEnqueueService
 {
     private readonly IMediator _mediator;
     private readonly IBackgroundJobClient _backgroundJobClient;
 
-    public CalculationJobEnqueueService(IMediator mediator, IBackgroundJobClient backgroundJobClient)
+    public JobEnqueueService(IMediator mediator, IBackgroundJobClient backgroundJobClient)
     {
 
         _mediator = mediator;

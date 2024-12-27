@@ -1,6 +1,8 @@
-﻿namespace HfDemo.DomainModel;
+using HfDemo.Contracts.Entities;
 
-public class CalculationResult
+namespace HfDemo.DomainModel;
+
+public class CalculationResult : IJobResult
 {
     public Guid Id { get; set; }
 

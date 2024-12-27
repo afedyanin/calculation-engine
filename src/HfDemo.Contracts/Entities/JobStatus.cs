@@ -1,4 +1,4 @@
-namespace HfDemo.DomainModel;
+namespace HfDemo.Contracts.Abstractions;
 
 public enum JobStatus
 {
