@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Database\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HfDemo.DomainModel\HfDemo.DomainModel.csproj" />
+  </ItemGroup>
+
 </Project>
