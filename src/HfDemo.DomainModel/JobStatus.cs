@@ -1,4 +1,4 @@
-﻿namespace HfDemo.DomainModel;
+namespace HfDemo.DomainModel;
 
 public enum JobStatus
 {
@@ -6,5 +6,6 @@ public enum JobStatus
     Initial = 1,
     InProgress = 2,
     Success = 3,
-    Error = 4
+    Error = 4,
+    Cancelled = 5,
 }
