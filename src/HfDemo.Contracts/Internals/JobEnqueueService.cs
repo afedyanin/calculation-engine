@@ -6,19 +6,17 @@ namespace HfDemo.Contracts.Internals;
 
 internal class JobEnqueueService : IJobEnqueueService
 {
-    private readonly IMediator _mediator;
     private readonly IBackgroundJobClient _backgroundJobClient;
 
-    public JobEnqueueService(IMediator mediator, IBackgroundJobClient backgroundJobClient)
+    public JobEnqueueService(IBackgroundJobClient backgroundJobClient)
     {
-
-        _mediator = mediator;
         _backgroundJobClient = backgroundJobClient;
     }
 
     public string Enqueue(ICalculationRequest request, CancellationToken cancellationToken)
     {
-        var jobId = _backgroundJobClient.Enqueue(() => _mediator.Send(request, cancellationToken));
+        var jobId = _backgroundJobClient.Enqueue<IMediator>(mediator => mediator.Send(request, cancellationToken));
+        var childJobId = _backgroundJobClient.ContinueJobWith<IMediator>(jobId, mediator => mediator.Send(request, cancellationToken));
         return jobId;
     }
 }
