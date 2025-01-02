@@ -1,4 +1,3 @@
-﻿using Hangfire;
 using HfDemo.Application.Domain;
 using HfDemo.Application.GenerateReport;
 using HfDemo.Application.GetReportResult;
@@ -13,14 +12,18 @@ namespace HfDemo.WebApi.Controllers;
 public class ReportsController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly IBackgroundJobClient _backgroundJobs;
 
-    public ReportsController(
-        IMediator mediator,
-        IBackgroundJobClient backgroundJobs)
+    public ReportsController(IMediator mediator)
     {
         _mediator = mediator;
-        _backgroundJobs = backgroundJobs;
+    }
+
+    [HttpPost]
+    public IActionResult Post([FromBody] GenerateReportParams request)
+    {
+        var reportRequest = new GenerateReportRequest();
+        var res = _mediator.Send(reportRequest);
+        return Ok(res);
     }
 
     // TODO: Remove it
@@ -55,23 +58,9 @@ public class ReportsController : ControllerBase
 
         var res = await _mediator.Send(request);
 
-        return Ok(res); 
+        return Ok(res);
     }
 
-    [HttpPost]
-    public IActionResult Post([FromBody] GenerateReportParams request) 
-    {
-        var generateRequest = new GenerateReportRequest
-        {
-            ReportId = request.ReportId,
-            AsOfDate = request.AsOfDate,
-            AdditionalData = request.AdditionalData,
-        };
-
-        var jobId = _backgroundJobs.Enqueue(() => _mediator.Send(generateRequest, CancellationToken.None));
-
-        return Ok(jobId);
-    }
 }
 
 public record GenerateReportParams
