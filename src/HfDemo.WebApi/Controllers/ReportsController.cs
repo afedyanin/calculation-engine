@@ -1,5 +1,5 @@
+using CalcEngine.Application.Handlers.Common;
 using HfDemo.Application.Domain;
-using HfDemo.Application.GenerateReport;
 using HfDemo.Application.GetReportResult;
 using HfDemo.Application.GetReportStatus;
 using MediatR;
@@ -19,10 +19,14 @@ public class ReportsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] GenerateReportParams request)
+    public async Task<IActionResult> Post([FromBody] GenerateReportParams request)
     {
-        var reportRequest = new GenerateReportRequest();
-        var res = _mediator.Send(reportRequest);
+        var reportRequest = new GenerateReportRequest()
+        {
+            CorrelationId = Guid.NewGuid(),
+        };
+
+        var res = await _mediator.Send(reportRequest);
         return Ok(res);
     }
 

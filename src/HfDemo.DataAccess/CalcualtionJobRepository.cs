@@ -1,36 +1,37 @@
-﻿using HfDemo.Contracts.Services;
+using HfDemo.Contracts.Entities;
+using HfDemo.Contracts.Services;
 using HfDemo.DomainModel;
-using HfDemo.DomainModel.Abstractions;
 
 namespace HfDemo.DataAccess;
 
 public class CalcualtionJobRepository : IJobRepository
 {
-    public CalculationJob GetById(Guid id)
+    public Task<bool> Delete(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<CalculationJob> GetByParentId(Guid parentId)
+    public Task<IJob> GetById(Guid jobId)
     {
         throw new NotImplementedException();
     }
 
-    public bool Upsert(CalculationJob job)
-    {
-        throw new NotImplementedException();
-    }
-    public bool Delete(Guid id)
+    public Task<IJob> Save(IJob job)
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<CalculationResult> GetResults(Guid jobId)
+    public Task<IJob> SaveChildJob(string name, string type, string parameters)
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<CalculationProgress> GetProgress(Guid jobId)
+    public Task<IJobProgress> SaveProgress(int percent, string? message = null)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IJobResult> SaveResult(string name, string type, string resultJson, string? metadataJson, bool isCompleted, string? message)
     {
         throw new NotImplementedException();
     }
