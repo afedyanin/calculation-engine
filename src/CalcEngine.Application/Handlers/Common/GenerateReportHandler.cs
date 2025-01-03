@@ -1,9 +1,7 @@
 using CalcEngine.Application.Handlers.SimpleReport;
+using CalcEngine.Client;
 using CalcEngine.Client.Extensions;
 using Hangfire;
-using Hangfire.Common;
-using Hangfire.States;
-using Hangfire.Storage;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -25,43 +23,19 @@ internal class GenerateReportHandler : IRequestHandler<GenerateReportRequest, Ge
         GenerateReportRequest request,
         CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Handler called with params: CorrelationId={request.CorrelationId}");
-
-        var request1 = new PrepareSimpleReportRequest()
-        {
-            CorrelationId = request.CorrelationId,
-        };
-
-        var jobId = _backgroundJobs.EnqueueMediatorRequest(request1);
-
-        var response = new GenerateReportResponse()
-        {
-            CorrelationId = request.CorrelationId,
-            JobIds = [jobId]
-        };
-
-        return Task.FromResult(response);
-    }
-
-
-    public Task<GenerateReportResponse> Handle_old(
-        GenerateReportRequest request,
-        CancellationToken cancellationToken)
-    {
 
         _logger.LogInformation($"Handler called with params: CorrelationId={request.CorrelationId}");
 
-        var request1 = new PrepareSimpleReportRequest()
-        {
-            CorrelationId = request.CorrelationId,
-        };
-
-        var request2 = new BuildSimpleReportRequest()
-        {
-            CorrelationId = request.CorrelationId,
-        };
-
-        var jobIds = _backgroundJobs.EnqueueSequence(request1, request2);
+        var jobIds = new RequestSequenceBuilder(_backgroundJobs)
+            .WithRequest(new PrepareSimpleReportRequest()
+            {
+                CorrelationId = request.CorrelationId,
+            })
+            .WithRequest(new BuildSimpleReportRequest()
+            {
+                CorrelationId = request.CorrelationId,
+            })
+            .GetJobIds();
 
         var response = new GenerateReportResponse()
         {

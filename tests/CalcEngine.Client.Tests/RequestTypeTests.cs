@@ -1,6 +1,4 @@
-using System.Reflection;
 using CalcEngine.Application.Handlers.SimpleReport;
-using CalcEngine.Client.Extensions;
 using Hangfire.Common;
 using Hangfire.Storage;
 using MediatR;
@@ -62,7 +60,7 @@ public class RequestTypeTests
             CorrelationId = guid,
         };
 
-        var job = BackgroundJobExtensions.CreateJob(request);
+        var job = CreateJob(request);
         var invocationData = InvocationData.SerializeJob(job);
         var payload = invocationData.SerializePayload();
 
@@ -80,7 +78,7 @@ public class RequestTypeTests
             CorrelationId = guid,
         };
 
-        var job = BackgroundJobExtensions.CreateJob(request);
+        var job = CreateJob(request);
 
         var invocationData = InvocationData.SerializeJob(job);
 
@@ -97,7 +95,7 @@ public class RequestTypeTests
             CorrelationId = guid,
         };
 
-        var job = BackgroundJobExtensions.CreateJob(request);
+        var job = CreateJob(request);
 
         var invocationData = InvocationData.SerializeJob(job);
 
@@ -115,7 +113,7 @@ public class RequestTypeTests
             CorrelationId = guid,
         };
 
-        var job = BackgroundJobExtensions.CreateJob(request);
+        var job = CreateJob(request);
         Assert.That(job, Is.Not.Null);
     }
 
@@ -129,7 +127,7 @@ public class RequestTypeTests
         Assert.That(request.CorrelationId, Is.EqualTo(correlationId));
     }
 
-    public static Job CreateJobFromExpression<T>(T request) where T : IRequest
+    private static Job CreateJob<T>(T request) where T : IRequest
     {
         var job = Job.FromExpression<IMediator>(m => m.Send(request, CancellationToken.None));
         return job;

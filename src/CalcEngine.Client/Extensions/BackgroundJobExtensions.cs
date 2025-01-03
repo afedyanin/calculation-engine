@@ -1,4 +1,3 @@
-using System.Reflection;
 using Hangfire;
 using Hangfire.Common;
 using Hangfire.States;
@@ -7,31 +6,7 @@ using MediatR;
 namespace CalcEngine.Client.Extensions;
 public static class BackgroundJobExtensions
 {
-    public static IEnumerable<string> EnqueueSequence(
-        this IBackgroundJobClient client,
-        params IRequest[] requests)
-    {
-        var jobIds = new List<string>();
-        var jobId = string.Empty;
-
-        foreach (var request in requests)
-        {
-            // first job
-            if (string.IsNullOrEmpty(jobId))
-            {
-                jobId = client.EnqueueMediatorRequest(request);
-                jobIds.Add(jobId);
-                continue;
-            }
-
-            jobId = client.ContinueJobWithMediatorRequest(jobId, request);
-            jobIds.Add(jobId);
-        }
-
-        return jobIds;
-    }
-
-    public static string EnqueueMediatorRequest<T>(
+    public static string EnqueueRequest<T>(
         this IBackgroundJobClient client,
         T request) where T : IRequest
     {
@@ -39,7 +14,7 @@ public static class BackgroundJobExtensions
         return client.Create(job, new EnqueuedState());
     }
 
-    public static string ContinueJobWithMediatorRequest<T>(
+    public static string ContinueWithRequest<T>(
         this IBackgroundJobClient client,
         string parentId,
         T request) where T : IRequest
@@ -48,23 +23,12 @@ public static class BackgroundJobExtensions
         return client.Create(job, new AwaitingState(parentId));
     }
 
-    public static Job CreateJob<T>(T request) where T : IRequest
+    private static Job CreateJob<T>(T request) where T : IRequest
     {
-        var methodInfo = GetMediatorMethodInfo<T>();
-        return new Job(methodInfo, request, CancellationToken.None);
-    }
-
-    private static MethodInfo GetMediatorMethodInfo<T>() where T : IRequest
-    {
-        var methodInfo = typeof(Mediator)
-            .GetMethods()
-            .First(
-            x => x.Name.Equals(nameof(Mediator.Send),
-                StringComparison.OrdinalIgnoreCase)
-            && x.IsGenericMethod
-            && x.GetParameters().Length == 2);
-
-        var genMethod = methodInfo.MakeGenericMethod(typeof(T));
-        return genMethod;
+        // CancellationToken type instances are substituted with ShutdownToken 
+        // during the background job performance, so we don't need to store 
+        // their values.
+        var job = Job.FromExpression<IMediator>(m => m.Send(request, CancellationToken.None));
+        return job;
     }
 }
