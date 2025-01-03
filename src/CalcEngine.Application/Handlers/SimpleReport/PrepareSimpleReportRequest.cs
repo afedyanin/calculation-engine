@@ -1,6 +1,6 @@
-using MediatR;
+using CalcEngine.Client;
 
 namespace CalcEngine.Application.Handlers.SimpleReport;
-public class PrepareSimpleReportRequest : IRequest
+public class PrepareSimpleReportRequest : CalcJobRequest
 {
 }

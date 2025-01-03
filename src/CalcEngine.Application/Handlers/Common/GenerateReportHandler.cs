@@ -1,5 +1,5 @@
 using CalcEngine.Application.Handlers.SimpleReport;
-using CalcEngine.Client.Extensions;
+using CalcEngine.Client;
 using Hangfire;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -25,16 +25,26 @@ internal class GenerateReportHandler : IRequestHandler<GenerateReportRequest, Ge
 
         _logger.LogInformation($"Handler called with params: CorrelationId={request.CorrelationId}");
 
-        var requests = new List<IRequest>
+        var request1 = new PrepareSimpleReportRequest()
         {
-            new PrepareSimpleReportRequest(),
-            new BuildSimpleReportRequest()
+            CorrelationId = request.CorrelationId,
         };
 
-        var jobIds = _backgroundJobs.EnqueueSequence(requests, cancellationToken);
+        var request2 = new BuildSimpleReportRequest()
+        {
+            CorrelationId = request.CorrelationId,
+        };
+
+        CalcJobRequest[] requests = [request1, request2];
+
+        var jobIds = EnqueueSequence(requests, cancellationToken);
+
+        //var jobIds = _backgroundJobs.EnqueueSequence(requests, cancellationToken);
+        //var jobIds = new[] { jobId1, jobId2 };
 
         var response = new GenerateReportResponse()
         {
+            CorrelationId = request.CorrelationId,
             JobIds = jobIds,
         };
 
@@ -42,4 +52,27 @@ internal class GenerateReportHandler : IRequestHandler<GenerateReportRequest, Ge
 
         return Task.FromResult(response);
     }
+    private IEnumerable<string> EnqueueSequence(
+        IEnumerable<CalcJobRequest> requests,
+        CancellationToken cancellationToken = default)
+    {
+        var jobIds = new List<string>();
+        var jobId = string.Empty;
+
+        foreach (var request in requests)
+        {
+            // first job
+            if (string.IsNullOrEmpty(jobId))
+            {
+                jobId = _backgroundJobs.Enqueue<IMediator>(m => m.Send(request, cancellationToken));
+                jobIds.Add(jobId);
+                continue;
+            }
+            jobId = _backgroundJobs.ContinueJobWith<IMediator>(jobId, m => m.Send(request, cancellationToken));
+            jobIds.Add(jobId);
+        }
+
+        return jobIds;
+    }
+
 }
