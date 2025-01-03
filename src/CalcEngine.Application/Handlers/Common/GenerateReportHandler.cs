@@ -1,6 +1,5 @@
 using CalcEngine.Application.Handlers.SimpleReport;
 using CalcEngine.Client;
-using CalcEngine.Client.Extensions;
 using Hangfire;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -28,6 +27,14 @@ internal class GenerateReportHandler : IRequestHandler<GenerateReportRequest, Ge
 
         var jobIds = new RequestSequenceBuilder(_backgroundJobs)
             .WithRequest(new PrepareSimpleReportRequest()
+            {
+                CorrelationId = request.CorrelationId,
+            })
+            .WithRequest(new PrepareSimpleReportRequest()
+            {
+                CorrelationId = request.CorrelationId,
+            })
+            .WithRequest(new BuildSimpleReportRequest()
             {
                 CorrelationId = request.CorrelationId,
             })

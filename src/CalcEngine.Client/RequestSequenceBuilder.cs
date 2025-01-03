@@ -7,30 +7,28 @@ namespace CalcEngine.Client;
 public class RequestSequenceBuilder
 {
     private readonly IBackgroundJobClient _jobClient;
-
-    private readonly IList<string> _jobIds;
-
-    private string _lastJobId;
+    private readonly LinkedList<string> _jobIds;
 
     public RequestSequenceBuilder(
         IBackgroundJobClient jobClient)
     {
         _jobClient = jobClient;
         _jobIds = [];
-        _lastJobId = string.Empty;
     }
 
     public RequestSequenceBuilder WithRequest<T>(T request) where T : IRequest
     {
-        if (string.IsNullOrEmpty(_lastJobId))
+        var last = _jobIds.LastOrDefault();
+
+        if (string.IsNullOrEmpty(last))
         {
-            _lastJobId = _jobClient.EnqueueRequest(request);
-            _jobIds.Add(_lastJobId);
+            last = _jobClient.EnqueueRequest(request);
+            _jobIds.AddLast(last);
             return this;
         }
 
-        _lastJobId = _jobClient.ContinueWithRequest(_lastJobId, request);
-        _jobIds.Add(_lastJobId);
+        last = _jobClient.ContinueWithRequest(last, request);
+        _jobIds.AddLast(last);
 
         return this;
     }
