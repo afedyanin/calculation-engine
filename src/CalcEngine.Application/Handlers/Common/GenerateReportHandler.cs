@@ -1,6 +1,7 @@
 using CalcEngine.Application.Handlers.SimpleReport;
-using CalcEngine.Client;
 using Hangfire;
+using Hangfire.Common;
+using Hangfire.States;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -35,25 +36,30 @@ internal class GenerateReportHandler : IRequestHandler<GenerateReportRequest, Ge
             CorrelationId = request.CorrelationId,
         };
 
-        CalcJobRequest[] requests = [request1, request2];
+        var job = CreateJob(request1, cancellationToken);
+        var jobid = _backgroundJobs.Create(job, new EnqueuedState());
 
-        var jobIds = EnqueueSequence(requests, cancellationToken);
 
-        //var jobIds = _backgroundJobs.EnqueueSequence(requests, cancellationToken);
+        //IRequest[] requests = [request1, request2];
+        //var jobIds = EnqueueSequence(requests, cancellationToken);
+
+        //var jobId1 = Enqueue(request1, cancellationToken);
+        //var jobId2 = ContinueJobWith(jobId1, request2, cancellationToken);
         //var jobIds = new[] { jobId1, jobId2 };
 
         var response = new GenerateReportResponse()
         {
             CorrelationId = request.CorrelationId,
-            JobIds = jobIds,
+            //JobIds = jobIds,
         };
 
-        _logger.LogInformation($"Jobs enqueued: {string.Join(',', jobIds)}");
+        // _logger.LogInformation($"Jobs enqueued: {string.Join(',', jobIds)}");
+        _logger.LogInformation($"Job enqueued: {jobid}");
 
         return Task.FromResult(response);
     }
     private IEnumerable<string> EnqueueSequence(
-        IEnumerable<CalcJobRequest> requests,
+        IRequest[] requests,
         CancellationToken cancellationToken = default)
     {
         var jobIds = new List<string>();
@@ -64,15 +70,37 @@ internal class GenerateReportHandler : IRequestHandler<GenerateReportRequest, Ge
             // first job
             if (string.IsNullOrEmpty(jobId))
             {
-                jobId = _backgroundJobs.Enqueue<IMediator>(m => m.Send(request, cancellationToken));
+                jobId = Enqueue(request, cancellationToken);
                 jobIds.Add(jobId);
                 continue;
             }
-            jobId = _backgroundJobs.ContinueJobWith<IMediator>(jobId, m => m.Send(request, cancellationToken));
+
+            jobId = ContinueJobWith(jobId, request, cancellationToken);
             jobIds.Add(jobId);
         }
 
         return jobIds;
     }
 
+    private string Enqueue<T>(T request, CancellationToken token) where T : IRequest
+    {
+        var job = CreateJob(request, token);
+        var jobId = _backgroundJobs.Create(job, new EnqueuedState());
+        return jobId;
+    }
+
+    private string ContinueJobWith<T>(string parentId, T request, CancellationToken token) where T : IRequest
+    {
+        var job = CreateJob(request, token);
+        var jobId = _backgroundJobs.Create(job, new AwaitingState(parentId));
+        return jobId;
+    }
+
+    private Job CreateJob<T>(T request, CancellationToken token) where T : IRequest
+    {
+        var type = typeof(Mediator);
+        var methodInfo = type.GetMethod("Send", [typeof(IRequest), typeof(CancellationToken)]);
+        _logger.LogInformation($"request type: {request.GetType().Name}");
+        return new Job(type, methodInfo, request, token);
+    }
 }
