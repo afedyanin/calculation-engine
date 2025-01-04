@@ -1,3 +1,19 @@
+# 2025-01-05
+
+## Бэклог
+- отделить структуру данных и ее построение от контекста медиатора и хф
+- вначале построить структуру и лишь затем ее использовать для генерации юнитов, задач и т.п.
+
+
+
+## Tree Data Structure 
+- https://stackoverflow.com/questions/66893/tree-data-structure-in-c-sharp
+- https://www.c-sharpcorner.com/article/tree-data-structure/
+- https://www.geeksforgeeks.org/introduction-to-tree-data-structure/
+- https://www.designgurus.io/answers/detail/how-to-implement-a-tree-data-structure-in-c
+- https://debug.to/3253/tree-in-data-structure-using-c
+- https://stackoverflow.com/questions/9860207/build-a-simple-high-performance-tree-data-structure-in-c-sharp/17995531
+
 # 2025-01-04
 
 ## Базовые тесты
