@@ -4,7 +4,11 @@
 - отделить структуру данных и ее построение от контекста медиатора и хф
 - вначале построить структуру и лишь затем ее использовать для генерации юнитов, задач и т.п.
 
-
+## Graph Data Structure
+- https://github.com/YaccConstructor/QuickGraph/tree/master
+- https://www.simplilearn.com/tutorials/c-sharp-tutorial/what-is-graphs-in-c-sharp
+- https://masterdotnet.com/csharp/ds/graphincsharp/
+- https://debug.to/3320/how-to-use-graph-and-bfs-in-c
 
 ## Tree Data Structure 
 - https://stackoverflow.com/questions/66893/tree-data-structure-in-c-sharp
