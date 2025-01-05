@@ -8,6 +8,8 @@ HangFire ASP.NET Host with npgsql
 - [Docs](https://docs.hangfire.io/en/latest/index.html)
 - [Hangfire.PostgreSql](https://github.com/hangfire-postgres/Hangfire.PostgreSql)
 - [Обзор библиотек для Hangfire](https://habr.com/ru/articles/764690/)
+- https://stackoverflow.com/questions/59196989/get-all-succeeded-jobs-with-hangfire-monitoring-api
+
 
 - [Dataflow-TPL-RU](https://learn.microsoft.com/ru-ru/dotnet/standard/parallel-programming/dataflow-task-parallel-library)
 - [DataFlow-TPL-EN](https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/dataflow-task-parallel-library)

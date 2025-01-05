@@ -1,5 +1,6 @@
 using Hangfire;
 using Hangfire.PostgreSql;
+using Hangfire.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,9 @@ public abstract class HangfireClientTestBase
     protected IConfiguration Configuration { get; }
 
     protected IBackgroundJobClient BackgroundJobClient { get; }
+    protected IRecurringJobManager RecurringJobClient { get; }
+
+    protected IMonitoringApi MonitoringApi { get; }
 
     protected HangfireClientTestBase()
     {
@@ -29,6 +33,8 @@ public abstract class HangfireClientTestBase
         _serviceProvider = _services.BuildServiceProvider();
 
         BackgroundJobClient = _serviceProvider.GetRequiredService<IBackgroundJobClient>();
+        RecurringJobClient = _serviceProvider.GetRequiredService<IRecurringJobManager>();
+        MonitoringApi = JobStorage.Current.GetMonitoringApi();
     }
 
     private static IConfiguration InitConfiguration()
