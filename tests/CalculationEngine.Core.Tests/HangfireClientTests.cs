@@ -1,5 +1,6 @@
 using Hangfire;
 using Hangfire.Common;
+using Hangfire.Storage;
 
 namespace CalculationEngine.Core.Tests;
 
@@ -37,6 +38,18 @@ public class HangfireClientTests : HangfireClientTestBase
         foreach (var job in jobs)
         {
             Console.WriteLine($"key={job.Key} succeeded={job.Value.InSucceededState}");
+        }
+    }
+
+    [Test]
+    public void CanCheckRemovedRecurringJob()
+    {
+        var jobs = JobStorageConnection.GetRecurringJobs();
+        Assert.That(jobs, Has.Count.GreaterThan(0));
+
+        foreach (var job in jobs)
+        {
+            Console.WriteLine($"key={job.Id} removed={job.Removed} lastJobId={job.LastJobId}");
         }
     }
 

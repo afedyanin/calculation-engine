@@ -13,9 +13,12 @@ public abstract class HangfireClientTestBase
     protected IConfiguration Configuration { get; }
 
     protected IBackgroundJobClient BackgroundJobClient { get; }
+
     protected IRecurringJobManager RecurringJobClient { get; }
 
     protected IMonitoringApi MonitoringApi { get; }
+
+    protected IStorageConnection JobStorageConnection { get; }
 
     protected HangfireClientTestBase()
     {
@@ -35,6 +38,7 @@ public abstract class HangfireClientTestBase
         BackgroundJobClient = _serviceProvider.GetRequiredService<IBackgroundJobClient>();
         RecurringJobClient = _serviceProvider.GetRequiredService<IRecurringJobManager>();
         MonitoringApi = JobStorage.Current.GetMonitoringApi();
+        JobStorageConnection = JobStorage.Current.GetConnection();
     }
 
     private static IConfiguration InitConfiguration()
