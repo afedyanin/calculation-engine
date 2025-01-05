@@ -14,9 +14,10 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        builder.Services.AddHangfire(config =>
-            config
+        builder.Services.AddHangfire(config => config
+            .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
             .UseSimpleAssemblyNameTypeSerializer()
+            .UseRecommendedSerializerSettings()
             .UsePostgreSqlStorage(c =>
                 c.UseNpgsqlConnection(builder.Configuration.GetConnectionString("HangfireConnection"))));
 

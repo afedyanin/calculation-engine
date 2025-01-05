@@ -1,15 +1,14 @@
+using Hangfire;
+
 namespace CalculationEngine.Core.Tests;
 
+[TestFixture(Category = "Integration", Explicit = true)]
 public class HangfireClientTests : HangfireClientTestBase
 {
-    [SetUp]
-    public void Setup()
-    {
-    }
-
     [Test]
     public void CanEnqueueJob()
     {
+        BackgroundJobClient.Enqueue(() => Console.WriteLine("Hello, Hangfire!"));
         Assert.Pass();
     }
 }
