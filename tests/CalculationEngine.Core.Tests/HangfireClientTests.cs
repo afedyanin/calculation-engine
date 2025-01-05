@@ -6,7 +6,7 @@ namespace CalculationEngine.Core.Tests;
 public class HangfireClientTests : HangfireClientTestBase
 {
     [Test]
-    public void CanEnqueueJob()
+    public void CanEnqueueBackgroundJob()
     {
         BackgroundJobClient.Enqueue(() => Console.WriteLine("Hello, Hangfire!"));
         Assert.Pass();
