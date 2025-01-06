@@ -14,9 +14,9 @@ public abstract class NodeBase : INode
 
     public IRequest Request { get; private set; }
 
-    public string? JobId { get; private set; }
-
     public int Level { get; private set; }
+
+    public string? JobId { get; protected set; }
 
     protected NodeBase(
         ICalculationGraph graph,
@@ -40,5 +40,5 @@ public abstract class NodeBase : INode
         return childNode;
     }
 
-    public abstract string Enqueue();
+    public abstract void Enqueue(IJobScheduler jobScheduler);
 }

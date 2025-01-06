@@ -16,8 +16,18 @@ public class Node : NodeBase
         _parentNode = parent;
     }
 
-    public override string Enqueue()
+    public override void Enqueue(IJobScheduler jobScheduler)
     {
-        return string.Empty;
+        if (string.IsNullOrEmpty(_parentNode.JobId))
+        {
+            throw new InvalidOperationException("Cannot enqueue child job with no parent jobId.");
+        }
+
+        JobId = jobScheduler.EnqueueAfter(_parentNode.JobId, Request);
+
+        foreach (var node in Children)
+        {
+            node.Enqueue(jobScheduler);
+        }
     }
 }

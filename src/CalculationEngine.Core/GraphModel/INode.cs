@@ -17,5 +17,5 @@ public interface INode
 
     INode AddChild(IRequest request);
 
-    string Enqueue();
+    void Enqueue(IJobScheduler jobScheduler);
 }

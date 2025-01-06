@@ -12,8 +12,13 @@ public class RootNode : NodeBase
 
     public override IEnumerable<INode> Parents => [];
 
-    public override string Enqueue()
+    public override void Enqueue(IJobScheduler jobScheduler)
     {
-        return string.Empty;
+        JobId = jobScheduler.Enqueue(Request);
+
+        foreach (var node in Children)
+        {
+            node.Enqueue(jobScheduler);
+        }
     }
 }
