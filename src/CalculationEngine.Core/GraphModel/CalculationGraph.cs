@@ -9,11 +9,14 @@ public class CalculationGraph : ICalculationGraph
 
     public Guid Id { get; }
 
-    public CalculationGraph()
+    public Guid ContextId { get; }
+
+    public CalculationGraph(Guid contextId)
     {
         Id = Guid.NewGuid();
         _rootNodes = new LinkedList<INode>();
         _joinNodes = new LinkedList<INode>();
+        ContextId = contextId;
     }
 
     public INode AddRoot(IRequest request)

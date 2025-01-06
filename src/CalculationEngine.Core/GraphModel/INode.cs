@@ -3,6 +3,8 @@ using MediatR;
 namespace CalculationEngine.Core.GraphModel;
 public interface INode
 {
+    Guid Id { get; }
+
     IEnumerable<INode> Parents { get; }
 
     IEnumerable<INode> Children { get; }

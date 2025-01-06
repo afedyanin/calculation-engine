@@ -8,6 +8,8 @@ public abstract class NodeBase : INode
 
     public abstract IEnumerable<INode> Parents { get; }
 
+    public Guid Id { get; }
+
     public IEnumerable<INode> Children => [.. _children];
 
     public ICalculationGraph Graph { get; private set; }
@@ -20,11 +22,13 @@ public abstract class NodeBase : INode
 
     protected bool Enqueued => !string.IsNullOrEmpty(JobId);
 
+
     protected NodeBase(
         ICalculationGraph graph,
         IRequest request,
         int level)
     {
+        Id = Guid.NewGuid();
         Graph = graph;
         Request = request;
         Level = level;
