@@ -1,4 +1,5 @@
 using CalculationEngine.AppDemo.Stubs;
+using CalculationEngine.Core.Handlers;
 using CalculationEngine.Core.HangfireExtensions;
 
 namespace CalculationEngine.Core.Tests.HangfireExtensions;
@@ -46,5 +47,37 @@ public class BacgroundJobClientExtensionsTests : HangfireClientTestBase
 
         var jobIds = new string[] { jobId1, jobId2, jobId3, jobId4 };
         Console.WriteLine($"Enqueued jobs={string.Join(',', jobIds)}");
+    }
+
+    [Test]
+    public void CanAwaitSequenceOfJobs()
+    {
+        var request = new DelayRequest
+        {
+            CorrelationId = Guid.NewGuid(),
+            Delay = TimeSpan.FromSeconds(1),
+        };
+
+        var jobId11 = BackgroundJobClient.EnqueueBackgroundJob(request);
+        var jobId12 = BackgroundJobClient.ContinueWithBackgropundJob(jobId11, request);
+        var jobId21 = BackgroundJobClient.EnqueueBackgroundJob(request);
+        var jobId22 = BackgroundJobClient.ContinueWithBackgropundJob(jobId21, request);
+
+        var jobIds = new string[] { jobId11, jobId12, jobId21, jobId22 };
+
+        var awaitRequest = new JobAwaitingRequest
+        {
+            JobIds = jobIds,
+            CorrelationId = request.CorrelationId,
+            PoolingInterval = TimeSpan.FromSeconds(1),
+        };
+
+        var awatingJobId = BackgroundJobClient.EnqueueBackgroundJob(awaitRequest);
+
+        var jobId31 = BackgroundJobClient.ContinueWithBackgropundJob(awatingJobId, request);
+
+        Console.WriteLine($"Enqueued jobs={string.Join(',', jobIds)}");
+        Console.WriteLine($"Awating awatingJobId={awatingJobId} ConinuationJobId={jobId31}");
+        Assert.Pass();
     }
 }
