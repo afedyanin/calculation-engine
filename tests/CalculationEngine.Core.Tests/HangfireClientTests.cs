@@ -42,15 +42,34 @@ public class HangfireClientTests : HangfireClientTestBase
     }
 
     [Test]
-    public void CanCheckRemovedRecurringJob()
+    public async Task CanGetJobHistory()
     {
-        var jobs = JobStorageConnection.GetRecurringJobs();
-        Assert.That(jobs, Has.Count.GreaterThan(0));
+        //var jobId = BackgroundJobClient.Enqueue(() => Console.WriteLine("Hello, Hangfire!"));
+        // await Task.Delay(4000);
 
-        foreach (var job in jobs)
+        var jobId = "102";
+
+        var jobDeatils = MonitoringApi.JobDetails(jobId);
+
+        Assert.That(jobDeatils, Is.Not.Null);
+
+        foreach (var item in jobDeatils.History)
         {
-            Console.WriteLine($"key={job.Id} removed={job.Removed} lastJobId={job.LastJobId}");
+            Console.WriteLine($"JobId={jobId} CreatedAt={item.CreatedAt} StateName={item.StateName} Reason={item.Reason}");
         }
     }
 
+    [Test]
+    public void CanGetLastState()
+    {
+        var jobId = "102";
+
+        var jobDeatils = MonitoringApi.JobDetails(jobId);
+        Assert.That(jobDeatils, Is.Not.Null);
+
+        var lastState = jobDeatils.History.OrderBy(x => x.CreatedAt).Last();
+        Assert.That(lastState, Is.Not.Null);
+
+        Console.WriteLine($"JobId={jobId} CreatedAt={lastState.CreatedAt} StateName={lastState.StateName} Reason={lastState.Reason}");
+    }
 }

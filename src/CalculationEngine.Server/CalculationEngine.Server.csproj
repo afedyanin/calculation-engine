@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CalculationEngine.AppDemo\CalculationEngine.AppDemo.csproj" />
     <ProjectReference Include="..\CalculationEngine.Core\CalculationEngine.Core.csproj" />
   </ItemGroup>
 
