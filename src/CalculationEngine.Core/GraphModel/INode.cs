@@ -18,4 +18,6 @@ public interface INode
     INode AddChild(IRequest request);
 
     void Enqueue(IJobScheduler jobScheduler);
+
+    string Render();
 }

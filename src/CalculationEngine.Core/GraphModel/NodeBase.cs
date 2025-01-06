@@ -18,6 +18,8 @@ public abstract class NodeBase : INode
 
     public string? JobId { get; protected set; }
 
+    protected bool Enqueued => !string.IsNullOrEmpty(JobId);
+
     protected NodeBase(
         ICalculationGraph graph,
         IRequest request,
@@ -26,6 +28,7 @@ public abstract class NodeBase : INode
         Graph = graph;
         Request = request;
         Level = level;
+        _children = new LinkedList<INode>();
     }
 
     public virtual INode AddChild(IRequest request)
@@ -41,4 +44,6 @@ public abstract class NodeBase : INode
     }
 
     public abstract void Enqueue(IJobScheduler jobScheduler);
+
+    public abstract string Render();
 }

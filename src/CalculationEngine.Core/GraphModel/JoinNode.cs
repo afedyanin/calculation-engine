@@ -1,3 +1,4 @@
+using System.Text;
 using CalculationEngine.Core.Handlers;
 using MediatR;
 
@@ -53,5 +54,33 @@ public class JoinNode : NodeBase
         }
 
         return [.. ids];
+    }
+
+    public override string Render()
+    {
+        if (!Enqueued)
+        {
+            return string.Empty;
+        }
+
+        var sb = new StringBuilder();
+
+        var ids = string.Join(',', GetParentJobIds());
+
+        sb.Append($"J({ids}) -> N({JobId}) ");
+
+        if (Children.Any())
+        {
+            sb.Append($"-> ");
+        }
+
+        foreach (var node in Children)
+        {
+            sb.Append(node.Render());
+        }
+
+        sb.AppendLine();
+
+        return sb.ToString();
     }
 }

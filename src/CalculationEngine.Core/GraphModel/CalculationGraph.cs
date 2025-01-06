@@ -1,3 +1,4 @@
+using System.Text;
 using MediatR;
 
 namespace CalculationEngine.Core.GraphModel;
@@ -31,12 +32,22 @@ public class CalculationGraph : ICalculationGraph
     }
     public void Enqueue(IJobScheduler jobScheduler)
     {
-        throw new NotImplementedException();
+        foreach (var node in _rootNodes)
+        {
+            node.Enqueue(jobScheduler);
+        }
     }
 
     public string Render()
     {
-        throw new NotImplementedException();
+        var sb = new StringBuilder();
+
+        foreach (var node in _rootNodes)
+        {
+            sb.AppendLine(node.Render());
+        }
+
+        return sb.ToString();
     }
 
     private int GetMaxLevel(IEnumerable<INode> nodes)

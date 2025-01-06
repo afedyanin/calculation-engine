@@ -1,3 +1,4 @@
+using System.Text;
 using MediatR;
 
 namespace CalculationEngine.Core.GraphModel;
@@ -29,5 +30,30 @@ public class Node : NodeBase
         {
             node.Enqueue(jobScheduler);
         }
+    }
+    public override string Render()
+    {
+        if (!Enqueued)
+        {
+            return string.Empty;
+        }
+
+        var sb = new StringBuilder();
+
+        sb.Append($"N({JobId}) ");
+
+        if (Children.Any())
+        {
+            sb.Append($"-> ");
+        }
+
+        foreach (var node in Children)
+        {
+            sb.Append(node.Render());
+        }
+
+        sb.AppendLine();
+
+        return sb.ToString();
     }
 }
