@@ -1,16 +1,25 @@
 using CalculationEngine.Core.GraphModel;
+using Hangfire;
 using MediatR;
 
 namespace CalculationEngine.Core.HangfireExtensions;
-internal class HangfireJobScheduler : IJobScheduler
+
+public class HangfireJobScheduler : IJobScheduler
 {
+    private readonly IBackgroundJobClient _jobClient;
+
+    public HangfireJobScheduler(IBackgroundJobClient jobClient)
+    {
+        _jobClient = jobClient;
+    }
+
     public string Enqueue(IRequest request)
     {
-        throw new NotImplementedException();
+        return _jobClient.EnqueueBackgroundJob(request);
     }
 
     public string EnqueueAfter(string previousJobId, IRequest request)
     {
-        throw new NotImplementedException();
+        return _jobClient.ContinueWithBackgropundJob(previousJobId, request);
     }
 }
