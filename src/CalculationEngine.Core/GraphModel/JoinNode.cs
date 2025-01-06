@@ -65,21 +65,23 @@ public class JoinNode : NodeBase
 
         var sb = new StringBuilder();
 
-        var ids = string.Join(',', GetParentJobIds());
+        var ident = new string('\t', Level);
+        var parentIds = string.Join(',', GetParentJobIds());
 
-        sb.Append($"J({ids}) -> N({JobId}) ");
+        sb.Append($"{ident}J({parentIds}) -> A({AwaitingJobId}) -> N({JobId}) ");
 
         if (Children.Any())
         {
-            sb.Append($"-> ");
+            var ids = string.Join(',', GetChildIds());
+            sb.Append($"-> ({ids})");
         }
+
+        sb.AppendLine();
 
         foreach (var node in Children)
         {
             sb.Append(node.Render());
         }
-
-        sb.AppendLine();
 
         return sb.ToString();
     }

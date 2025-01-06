@@ -39,20 +39,23 @@ public class Node : NodeBase
         }
 
         var sb = new StringBuilder();
+        var ident = new string('\t', Level);
 
-        sb.Append($"N({JobId}) ");
+        sb.Append($"{ident}N({JobId}) ");
 
         if (Children.Any())
         {
-            sb.Append($"-> ");
+            var ids = string.Join(',', GetChildIds());
+
+            sb.Append($"-> ({ids})");
         }
+
+        sb.AppendLine();
 
         foreach (var node in Children)
         {
             sb.Append(node.Render());
         }
-
-        sb.AppendLine();
 
         return sb.ToString();
     }

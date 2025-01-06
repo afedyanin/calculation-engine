@@ -36,7 +36,7 @@ public abstract class NodeBase : INode
         var childNode = new Node(
             Graph,
             request,
-            Level++,
+            Level + 1,
             this);
 
         _children.AddLast(childNode);
@@ -46,4 +46,7 @@ public abstract class NodeBase : INode
     public abstract void Enqueue(IJobScheduler jobScheduler);
 
     public abstract string Render();
+
+    protected string[] GetChildIds() =>
+        _children.Select(node => node.JobId).ToArray();
 }

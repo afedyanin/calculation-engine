@@ -5,6 +5,7 @@ namespace CalculationEngine.Core.GraphModel;
 public class CalculationGraph : ICalculationGraph
 {
     private readonly LinkedList<INode> _rootNodes;
+    private readonly LinkedList<INode> _joinNodes;
 
     public Guid Id { get; }
 
@@ -12,6 +13,7 @@ public class CalculationGraph : ICalculationGraph
     {
         Id = Guid.NewGuid();
         _rootNodes = new LinkedList<INode>();
+        _joinNodes = new LinkedList<INode>();
     }
 
     public INode AddRoot(IRequest request)
@@ -24,15 +26,24 @@ public class CalculationGraph : ICalculationGraph
 
     public INode Join(INode[] nodes, IRequest request)
     {
-        // TODO: Validate nodes belong this graph
+        if (!OwnNodes(nodes))
+        {
+            throw new InvalidOperationException("Cannot join nodes with different graphs.");
+        }
+
         var level = GetMaxLevel(nodes);
         var joinNode = new JoinNode(this, request, level++, nodes);
+        _joinNodes.AddLast(joinNode);
 
         return joinNode;
     }
     public void Enqueue(IJobScheduler jobScheduler)
     {
         foreach (var node in _rootNodes)
+        {
+            node.Enqueue(jobScheduler);
+        }
+        foreach (var node in _joinNodes)
         {
             node.Enqueue(jobScheduler);
         }
@@ -47,9 +58,26 @@ public class CalculationGraph : ICalculationGraph
             sb.AppendLine(node.Render());
         }
 
+        foreach (var node in _joinNodes)
+        {
+            sb.AppendLine(node.Render());
+        }
+
         return sb.ToString();
     }
 
     private int GetMaxLevel(IEnumerable<INode> nodes)
         => nodes == null ? 0 : nodes.Max(x => x.Level);
+
+    private bool OwnNodes(INode[] nodes)
+    {
+        foreach (var node in nodes)
+        {
+            if (node.Graph.Id != Id)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }
