@@ -2,12 +2,16 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using Hangfire.Storage;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using MediatR;
+using CalculationEngine.AppDemo;
 
 namespace CalculationEngine.Core.Tests;
 public abstract class HangfireClientTestBase
 {
     private readonly IServiceCollection _services;
+
     private readonly ServiceProvider _serviceProvider;
 
     protected IConfiguration Configuration { get; }
@@ -19,6 +23,10 @@ public abstract class HangfireClientTestBase
     protected IMonitoringApi MonitoringApi { get; }
 
     protected IStorageConnection JobStorageConnection { get; }
+
+    protected IMediator Mediator { get; }
+
+    protected ILogger<T> GetLogger<T>() => _serviceProvider.GetRequiredService<ILogger<T>>();
 
     protected HangfireClientTestBase()
     {
@@ -33,12 +41,19 @@ public abstract class HangfireClientTestBase
                 c.UseNpgsqlConnection(Configuration.GetConnectionString("HangfireConnection")))
         );
 
+        _services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(HangfireClientTestBase).Assembly));
+
+        _services.AddLogging(builder => builder.AddConsole());
+
+        _services.AddAppDemo();
+
         _serviceProvider = _services.BuildServiceProvider();
 
         BackgroundJobClient = _serviceProvider.GetRequiredService<IBackgroundJobClient>();
         RecurringJobClient = _serviceProvider.GetRequiredService<IRecurringJobManager>();
         MonitoringApi = JobStorage.Current.GetMonitoringApi();
         JobStorageConnection = JobStorage.Current.GetConnection();
+        Mediator = _serviceProvider.GetRequiredService<IMediator>();
     }
 
     private static IConfiguration InitConfiguration()

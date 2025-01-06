@@ -1,6 +1,5 @@
 using Hangfire;
 using Hangfire.PostgreSql;
-using CalculationEngine.AppDemo;
 
 namespace CalculationEngine.Server;
 
@@ -28,7 +27,6 @@ public class Program
         });
 
         // Add Mediator Stuff Here
-        builder.Services.AddAppDemo();
 
         var app = builder.Build();
 
