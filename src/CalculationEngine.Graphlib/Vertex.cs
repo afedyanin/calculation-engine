@@ -8,5 +8,5 @@ public class Vertex<T> where T : class
 
     public List<Vertex<T>> Neighbors { get; set; } = [];
 
-    public override string ToString() => $"Index={Index} Value={Value}";
+    public override string ToString() => $"Index={Index} Value={Value} Neighbors={Neighbors.Count}";
 }

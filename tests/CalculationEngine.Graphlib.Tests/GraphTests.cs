@@ -8,6 +8,49 @@ public class GraphTests
     [Test]
     public void CanCreateSimpleGraph()
     {
+
+        var graph = CreateSimpleGraph();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(graph[0, 1], Is.Not.Null);
+            Assert.That(graph[0, 3], Is.Not.Null);
+            Assert.That(graph[0, 4], Is.Null);
+        });
+
+        foreach (var v in graph.Vertices)
+        {
+            Console.WriteLine(v);
+        }
+
+        foreach (var edge in graph.GetEdges())
+        {
+            Console.WriteLine(edge);
+        }
+    }
+
+    [Test]
+    public void CanUseDFS()
+    {
+        var graph = CreateSimpleGraph();
+        var vertices = graph.DFS();
+        vertices.ForEach(Console.WriteLine);
+
+        Assert.Pass();
+    }
+
+    [Test]
+    public void CanUseBFS()
+    {
+        var graph = CreateSimpleGraph();
+        var vertices = graph.BFS();
+        vertices.ForEach(Console.WriteLine);
+
+        Assert.Pass();
+    }
+
+    private static Graph<Item> CreateSimpleGraph()
+    {
         var graph = new Graph<Item>();
 
         var v1 = graph.AddVertex(new Item(10));
@@ -30,16 +73,6 @@ public class GraphTests
         graph.AddEdge(v6, v7);
         graph.AddEdge(v7, v8);
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(graph[v1.Index, v2.Index], Is.Not.Null);
-            Assert.That(graph[v1.Index, v3.Index], Is.Not.Null);
-            Assert.That(graph[v1.Index, v4.Index], Is.Null);
-        });
-
-        foreach (var v in graph.Vertices)
-        {
-            Console.WriteLine(v);
-        }
+        return graph;
     }
 }
