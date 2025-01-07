@@ -6,6 +6,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using CalculationEngine.AppDemo;
+using CalculationEngine.Core.GraphModel;
+using CalculationEngine.Core.HangfireExtensions;
 
 namespace CalculationEngine.Core.Tests;
 public abstract class HangfireClientTestBase
@@ -16,9 +18,11 @@ public abstract class HangfireClientTestBase
 
     protected IConfiguration Configuration { get; }
 
-    protected IBackgroundJobClient BackgroundJobClient { get; }
+    protected IJobScheduler JobScheduler { get; }
 
     protected IRecurringJobManager RecurringJobClient { get; }
+
+    protected IBackgroundJobClient BackgroundJobClient { get; }
 
     protected IMonitoringApi MonitoringApi { get; }
 
@@ -41,6 +45,8 @@ public abstract class HangfireClientTestBase
                 c.UseNpgsqlConnection(Configuration.GetConnectionString("HangfireConnection")))
         );
 
+        _services.AddScoped<IJobScheduler, HangfireJobScheduler>();
+
         _services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(HangfireClientTestBase).Assembly));
 
         _services.AddLogging(builder => builder.AddConsole());
@@ -48,8 +54,8 @@ public abstract class HangfireClientTestBase
         _services.AddAppDemo();
 
         _serviceProvider = _services.BuildServiceProvider();
-
         BackgroundJobClient = _serviceProvider.GetRequiredService<IBackgroundJobClient>();
+        JobScheduler = _serviceProvider.GetRequiredService<IJobScheduler>();
         RecurringJobClient = _serviceProvider.GetRequiredService<IRecurringJobManager>();
         MonitoringApi = JobStorage.Current.GetMonitoringApi();
         JobStorageConnection = JobStorage.Current.GetConnection();

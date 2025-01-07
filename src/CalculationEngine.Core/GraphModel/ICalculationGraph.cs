@@ -5,8 +5,6 @@ public interface ICalculationGraph
 {
     Guid Id { get; }
 
-    Guid ContextId { get; }
-
     INode AddRoot(IRequest request);
 
     INode Join(INode[] nodes, IRequest request);
