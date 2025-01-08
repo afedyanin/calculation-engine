@@ -1,6 +1,7 @@
+using CalculationEngine.Graphlib.Algos;
 using static CalculationEngine.Graphlib.Tests.GraphFactory;
 
-namespace CalculationEngine.Graphlib.Tests;
+namespace CalculationEngine.Graphlib.Tests.Algos;
 
 [TestFixture(Category = "Unit")]
 public class CycleDetectionTests
@@ -8,7 +9,7 @@ public class CycleDetectionTests
     [Test]
     public void SimpleGraphHasNoCycles()
     {
-        var graph = GraphFactory.CreateSimpleGraph();
+        var graph = CreateSimpleGraph();
         var hasCycle = graph.HasAnyCycle();
 
         Assert.That(hasCycle, Is.False);
@@ -17,7 +18,7 @@ public class CycleDetectionTests
     [Test]
     public void CyclicGraphHasCycles()
     {
-        var graph = GraphFactory.CreateCyclicGraph();
+        var graph = CreateCyclicGraph();
         var hasCycle = graph.HasAnyCycle();
         Assert.That(hasCycle, Is.True);
     }
@@ -25,7 +26,7 @@ public class CycleDetectionTests
     [Test]
     public void CyclicGraphWithRemovedCyclesHasNoCycles()
     {
-        var graph = GraphFactory.CreateCyclicGraph();
+        var graph = CreateCyclicGraph();
         var v8 = graph.Vertices[7];
         var v4 = graph.Vertices[3];
         var v6 = graph.Vertices[5];
@@ -40,7 +41,7 @@ public class CycleDetectionTests
     [Test]
     public void CyclicGraphWithRemovedOneCycleHasCycles01()
     {
-        var graph = GraphFactory.CreateCyclicGraph();
+        var graph = CreateCyclicGraph();
         var v8 = graph.Vertices[7];
         var v4 = graph.Vertices[3];
         var v6 = graph.Vertices[5];
@@ -55,7 +56,7 @@ public class CycleDetectionTests
     [Test]
     public void CyclicGraphWithRemovedOneCycleHasCycles02()
     {
-        var graph = GraphFactory.CreateCyclicGraph();
+        var graph = CreateCyclicGraph();
         var v8 = graph.Vertices[7];
         var v4 = graph.Vertices[3];
         var v6 = graph.Vertices[5];
@@ -72,7 +73,7 @@ public class CycleDetectionTests
     [Test]
     public void CircleGraphHasCycles()
     {
-        var graph = GraphFactory.CreateCircleGraph();
+        var graph = CreateCircleGraph();
 
         graph.GetEdges().ForEach(Console.WriteLine);
 
@@ -83,7 +84,7 @@ public class CycleDetectionTests
     [Test]
     public void CircleGraphWithoutOneEdgeHasNoCycles01()
     {
-        var graph = GraphFactory.CreateCircleGraph();
+        var graph = CreateCircleGraph();
         var v4 = graph.Vertices[3];
         var v1 = graph.Vertices[0];
         graph.RemoveEdge(v4, v1);
@@ -97,7 +98,7 @@ public class CycleDetectionTests
     [Test]
     public void CircleGraphWithoutOneEdgeHasNoCycles02()
     {
-        var graph = GraphFactory.CreateCircleGraph();
+        var graph = CreateCircleGraph();
         var v2 = graph.Vertices[1];
         var v3 = graph.Vertices[2];
         graph.RemoveEdge(v2, v3);
@@ -111,7 +112,7 @@ public class CycleDetectionTests
     [Test]
     public void CircleGraphWithAdditionalEdgeHasCycles01()
     {
-        var graph = GraphFactory.CreateCircleGraph();
+        var graph = CreateCircleGraph();
         var v2 = graph.Vertices[1];
         var v4 = graph.Vertices[3];
         graph.AddEdge(v4, v2);
@@ -125,7 +126,7 @@ public class CycleDetectionTests
     [Test]
     public void CircleGraphWithAdditionalEdgeHasCycles02()
     {
-        var graph = GraphFactory.CreateCircleGraph();
+        var graph = CreateCircleGraph();
         var v1 = graph.Vertices[0];
         var v2 = graph.Vertices[1];
         var v4 = graph.Vertices[3];

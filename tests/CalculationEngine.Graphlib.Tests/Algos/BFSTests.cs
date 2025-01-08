@@ -1,30 +1,32 @@
-namespace CalculationEngine.Graphlib.Tests;
+using CalculationEngine.Graphlib.Algos;
+
+namespace CalculationEngine.Graphlib.Tests.Algos;
 
 [TestFixture(Category = "Unit")]
-public class DFSTests
+public class BFSTests
 {
     [Test]
-    public void CanPerformDFSForSimpleGraph()
+    public void CanPerformBFSForSimpleGraph()
     {
         var graph = GraphFactory.CreateSimpleGraph();
-        var vertices = graph.DFS();
+        var vertices = graph.BFS();
         //vertices.ForEach(Console.WriteLine);
 
         var actual = vertices.Select(v => v.Index + 1).ToArray();
-        var expected = new int[] { 1, 2, 4, 5, 6, 7, 8, 3 };
+        var expected = new int[] { 1, 2, 3, 4, 5, 6, 7, 8 };
 
         Assert.That(actual, Is.EquivalentTo(expected));
     }
 
     [Test]
-    public void CanPerformDFSForCyclicGraph()
+    public void CanPerformBFSForCyclicGraph()
     {
         var graph = GraphFactory.CreateCyclicGraph();
-        var vertices = graph.DFS();
+        var vertices = graph.BFS();
         //vertices.ForEach(Console.WriteLine);
 
         var actual = vertices.Select(v => v.Index + 1).ToArray();
-        var expected = new int[] { 1, 2, 4, 5, 6, 7, 8, 3 };
+        var expected = new int[] { 1, 2, 3, 4, 5, 6, 7, 8 };
 
         Assert.That(actual, Is.EquivalentTo(expected));
     }
