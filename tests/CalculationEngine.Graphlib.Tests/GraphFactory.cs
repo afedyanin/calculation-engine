@@ -57,7 +57,24 @@ internal static class GraphFactory
 
         // Cycles
         graph.AddEdge(v8, v4);
-        graph.AddEdge(v3, v2);
+        graph.AddEdge(v6, v4);
+
+        return graph;
+    }
+
+    public static Graph<Item> CreateCircleGraph()
+    {
+        var graph = new Graph<Item>();
+
+        var v1 = graph.AddVertex(new Item(10));
+        var v2 = graph.AddVertex(new Item(20));
+        var v3 = graph.AddVertex(new Item(30));
+        var v4 = graph.AddVertex(new Item(40));
+
+        graph.AddEdge(v1, v2);
+        graph.AddEdge(v2, v3);
+        graph.AddEdge(v3, v4);
+        graph.AddEdge(v4, v1);
 
         return graph;
     }

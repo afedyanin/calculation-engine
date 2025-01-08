@@ -2,7 +2,7 @@ namespace CalculationEngine.Graphlib;
 public static class GraphAlgos
 {
 
-    #region DFS
+    #region Depth First Traversal (DFS)
     public static List<Vertex<T>> DFS<T>(this Graph<T> graph) where T : class
     {
         bool[] isVisited = new bool[graph.Vertices.Count];
@@ -33,7 +33,7 @@ public static class GraphAlgos
 
     #endregion
 
-    #region BFS
+    #region Breadth First Search (BFS)
     public static List<Vertex<T>> BFS<T>(this Graph<T> graph) where T : class
     {
         return graph.BFS(graph.Vertices[0]);
@@ -68,37 +68,59 @@ public static class GraphAlgos
     #endregion
 
     #region Cycle Detection
-
+    // Function to detect cycle in a directed graph
+    // https://www.geeksforgeeks.org/detect-cycle-in-a-graph/
     public static bool HasAnyCycle<T>(this Graph<T> graph) where T : class
     {
         var count = graph.Vertices.Count;
-        bool[] isVisited = new bool[count];
-        bool[] marked = new bool[count];
+        bool[] visited = new bool[count];
+        bool[] recStack = new bool[count];
 
-        return graph.HasAnyCycle(graph.Vertices[0], isVisited, marked);
-    }
-
-    private static bool HasAnyCycle<T>(this Graph<T> graph,
-        Vertex<T> vertex,
-        bool[] isVisited,
-        bool[] marked) where T : class
-    {
-        isVisited[vertex.Index] = true;
-        marked[vertex.Index] = true;
-
-        foreach (var neighbor in vertex.Neighbors)
+        // Call the recursive helper function to 
+        // detect cycle in different DFS trees
+        for (var index = 0; index < count; index++)
         {
-            if (marked[neighbor.Index])
+            if (!visited[index])
             {
-                return true;
-            }
-            if (!isVisited[neighbor.Index])
-            {
-                return graph.HasAnyCycle(neighbor, isVisited, marked);
+                if (graph.HasAnyCycle(graph.Vertices[index], visited, recStack))
+                {
+                    return true;
+                }
             }
         }
 
-        marked[vertex.Index] = false;
+        return false;
+    }
+
+    // Utility function to detect cycle in a directed graph
+    private static bool HasAnyCycle<T>(this Graph<T> graph,
+        Vertex<T> vertex,
+        bool[] visited,
+        bool[] recStack) where T : class
+    {
+        if (!visited[vertex.Index])
+        {
+            // Mark the current node as visited 
+            // and part of recursion stack
+            visited[vertex.Index] = true;
+            recStack[vertex.Index] = true;
+
+            // Recur for all the vertices adjacent to this vertex
+            foreach (var neighbor in vertex.Neighbors)
+            {
+                if (!visited[neighbor.Index] &&
+                    graph.HasAnyCycle(neighbor, visited, recStack))
+                {
+                    return true;
+                }
+                else if (recStack[neighbor.Index])
+                {
+                    return true;
+                }
+            }
+        }
+        // Remove the vertex from recursion stack
+        recStack[vertex.Index] = false;
         return false;
     }
 

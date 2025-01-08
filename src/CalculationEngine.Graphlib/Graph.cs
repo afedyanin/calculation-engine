@@ -47,15 +47,16 @@ public class Graph<T> where T : class
         from.Neighbors.Add(to);
     }
 
-    public void RemoveEdge(Vertex<T> from, Vertex<T> to)
+    public bool RemoveEdge(Vertex<T> from, Vertex<T> to)
     {
         int index = from.Neighbors.FindIndex(n => n == to);
         if (index < 0)
         {
-            return;
+            return false;
         }
 
         from.Neighbors.RemoveAt(index);
+        return true;
     }
 
     public List<Edge<T>> GetEdges()
