@@ -77,59 +77,6 @@ public class Graph<T> where T : class
         return edges;
     }
 
-    public List<Vertex<T>> DFS()
-    {
-        bool[] isVisited = new bool[Vertices.Count];
-
-        List<Vertex<T>> result = [];
-
-        DFS(isVisited, Vertices[0], result);
-
-        return result;
-    }
-
-    public List<Vertex<T>> BFS() => BFS(Vertices[0]);
-
-    private void DFS(bool[] isVisited, Vertex<T> vertex, List<Vertex<T>> result)
-    {
-        result.Add(vertex);
-
-        isVisited[vertex.Index] = true;
-
-        foreach (Vertex<T> neighbor in vertex.Neighbors)
-        {
-            if (!isVisited[neighbor.Index])
-            {
-                DFS(isVisited, neighbor, result);
-            }
-        }
-    }
-
-    private List<Vertex<T>> BFS(Vertex<T> vertex)
-    {
-        bool[] isVisited = new bool[Vertices.Count];
-        isVisited[vertex.Index] = true;
-        List<Vertex<T>> result = [];
-        Queue<Vertex<T>> queue = [];
-        queue.Enqueue(vertex);
-
-        while (queue.Count > 0)
-        {
-            Vertex<T> next = queue.Dequeue();
-            result.Add(next);
-            foreach (Vertex<T> neighbor in next.Neighbors)
-            {
-                if (!isVisited[neighbor.Index])
-                {
-                    isVisited[neighbor.Index] = true;
-                    queue.Enqueue(neighbor);
-                }
-            }
-        }
-
-        return result;
-    }
-
     private void UpdateIndices()
     {
         int i = 0;
