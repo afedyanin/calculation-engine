@@ -54,7 +54,8 @@ internal static class GraphFactory
         graph.AddEdge(v5, v8);
         graph.AddEdge(v6, v7);
         graph.AddEdge(v7, v8);
-        // Cycle
+
+        // Cycles
         graph.AddEdge(v8, v4);
         graph.AddEdge(v3, v2);
 

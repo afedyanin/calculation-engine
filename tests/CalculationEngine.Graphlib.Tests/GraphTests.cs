@@ -21,4 +21,13 @@ public class GraphTests
             Assert.That(graph[0, 4], Is.Null);
         });
     }
+
+    [Test]
+    public void CanCreateCyclicGraph()
+    {
+        var graph = GraphFactory.CreateCyclicGraph();
+
+        graph.Vertices.ForEach(Console.WriteLine);
+        graph.GetEdges().ForEach(Console.WriteLine);
+    }
 }

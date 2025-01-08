@@ -9,24 +9,24 @@ public static class GraphAlgos
 
         List<Vertex<T>> result = [];
 
-        graph.DFS(isVisited, graph.Vertices[0], result);
+        graph.DFS(graph.Vertices[0], isVisited, result);
 
         return result;
     }
     private static void DFS<T>(this Graph<T> graph,
-        bool[] isVisited,
         Vertex<T> vertex,
+        bool[] isVisited,
         List<Vertex<T>> result) where T : class
     {
         result.Add(vertex);
 
         isVisited[vertex.Index] = true;
 
-        foreach (Vertex<T> neighbor in vertex.Neighbors)
+        foreach (var neighbor in vertex.Neighbors)
         {
             if (!isVisited[neighbor.Index])
             {
-                graph.DFS(isVisited, neighbor, result);
+                graph.DFS(neighbor, isVisited, result);
             }
         }
     }
@@ -51,9 +51,9 @@ public static class GraphAlgos
 
         while (queue.Count > 0)
         {
-            Vertex<T> next = queue.Dequeue();
+            var next = queue.Dequeue();
             result.Add(next);
-            foreach (Vertex<T> neighbor in next.Neighbors)
+            foreach (var neighbor in next.Neighbors)
             {
                 if (!isVisited[neighbor.Index])
                 {
@@ -65,5 +65,42 @@ public static class GraphAlgos
 
         return result;
     }
+    #endregion
+
+    #region Cycle Detection
+
+    public static bool HasAnyCycle<T>(this Graph<T> graph) where T : class
+    {
+        var count = graph.Vertices.Count;
+        bool[] isVisited = new bool[count];
+        bool[] marked = new bool[count];
+
+        return graph.HasAnyCycle(graph.Vertices[0], isVisited, marked);
+    }
+
+    private static bool HasAnyCycle<T>(this Graph<T> graph,
+        Vertex<T> vertex,
+        bool[] isVisited,
+        bool[] marked) where T : class
+    {
+        isVisited[vertex.Index] = true;
+        marked[vertex.Index] = true;
+
+        foreach (var neighbor in vertex.Neighbors)
+        {
+            if (marked[neighbor.Index])
+            {
+                return true;
+            }
+            if (!isVisited[neighbor.Index])
+            {
+                return graph.HasAnyCycle(neighbor, isVisited, marked);
+            }
+        }
+
+        marked[vertex.Index] = false;
+        return false;
+    }
+
     #endregion
 }
