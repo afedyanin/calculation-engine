@@ -12,6 +12,14 @@
 - [NpgSql](https://www.npgsql.org/efcore/)
 - [Введение в Entity Framework Core](https://metanit.com/sharp/efcore/1.1.php)
 
+### Migrations
+
+```shell
+dotnet tool install --global dotnet-ef
+
+dotnet ef migrations add InitialCreate
+
+```
 
 
 
