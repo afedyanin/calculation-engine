@@ -5,7 +5,14 @@
 - Создать граф на основе реквестов 
 - Сохранить граф в БД на основе реквестов
 - Создать реквест и поставить джобу на загрузку и парсинг графа из HF агента
-- 
+
+## EF Core
+
+- [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli)
+- [NpgSql](https://www.npgsql.org/efcore/)
+- [Введение в Entity Framework Core](https://metanit.com/sharp/efcore/1.1.php)
+
+
 
 
 # 2025-01-07

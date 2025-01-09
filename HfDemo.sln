@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculationEngine.Graphlib"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculationEngine.Graphlib.Tests", "tests\CalculationEngine.Graphlib.Tests\CalculationEngine.Graphlib.Tests.csproj", "{53ABC2A7-B062-4F8C-9F3A-4FDFEA20726B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculationEngine.DataAccess", "src\CalculationEngine.DataAccess\CalculationEngine.DataAccess.csproj", "{56B878D7-B8E5-48CA-96C6-4EF860B48C98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{53ABC2A7-B062-4F8C-9F3A-4FDFEA20726B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53ABC2A7-B062-4F8C-9F3A-4FDFEA20726B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53ABC2A7-B062-4F8C-9F3A-4FDFEA20726B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56B878D7-B8E5-48CA-96C6-4EF860B48C98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56B878D7-B8E5-48CA-96C6-4EF860B48C98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56B878D7-B8E5-48CA-96C6-4EF860B48C98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56B878D7-B8E5-48CA-96C6-4EF860B48C98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{8D3E48B6-9D12-4E87-BF00-7A3AD646CC8F} = {9740CDE7-1499-4015-8D34-52B47F85626E}
 		{BF51CE25-0EBC-4626-A425-9A65F4A3BDDB} = {9740CDE7-1499-4015-8D34-52B47F85626E}
 		{53ABC2A7-B062-4F8C-9F3A-4FDFEA20726B} = {29D13B89-B01E-48A6-A715-E058DD526317}
+		{56B878D7-B8E5-48CA-96C6-4EF860B48C98} = {9740CDE7-1499-4015-8D34-52B47F85626E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {112446CA-3E13-4E65-B702-CEA58E2762B3}
