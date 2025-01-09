@@ -1,5 +1,6 @@
 using CalculationEngine.AppDemo.Stubs;
 using CalculationEngine.Core.Model;
+using CalculationEngine.Core.Extensions;
 
 namespace CalculationEngine.Core.Tests.Model;
 
@@ -14,9 +15,9 @@ public class CalculationGraphTests
             Id = Guid.NewGuid(),
         };
 
-        var v1 = graph.AddVertex(new DelayRequest());
-        var v2 = graph.AddVertex(new DelayRequest());
-        var v3 = graph.AddVertex(new DelayRequest());
+        var v1 = graph.AddCalculationVertex(new DelayRequest());
+        var v2 = graph.AddCalculationVertex(new DelayRequest());
+        var v3 = graph.AddCalculationVertex(new DelayRequest());
 
         graph.AddEdge(v1, v2);
         graph.AddEdge(v2, v3);
@@ -35,9 +36,9 @@ public class CalculationGraphTests
             Id = Guid.NewGuid(),
         };
 
-        var v1 = graph.AddVertex(new DelayRequest());
-        var v2 = graph.AddVertex(new DelayRequest());
-        var v3 = graph.AddVertex(new DelayRequest());
+        var v1 = graph.AddCalculationVertex(new DelayRequest());
+        var v2 = graph.AddCalculationVertex(new DelayRequest());
+        var v3 = graph.AddCalculationVertex(new DelayRequest());
 
         graph.AddEdge(v1, v2);
         graph.AddEdge(v2, v3);
@@ -55,9 +56,9 @@ public class CalculationGraphTests
             Id = Guid.NewGuid(),
         };
 
-        var v1 = graph.AddVertex(new DelayRequest());
-        var v2 = graph.AddVertex(new DelayRequest());
-        var v3 = graph.AddVertex(new DelayRequest());
+        var v1 = graph.AddCalculationVertex(new DelayRequest());
+        var v2 = graph.AddCalculationVertex(new DelayRequest());
+        var v3 = graph.AddCalculationVertex(new DelayRequest());
 
         graph.AddEdge(v1, v2);
         graph.AddEdge(v2, v3);

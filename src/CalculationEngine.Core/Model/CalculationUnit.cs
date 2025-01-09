@@ -8,7 +8,7 @@ public class CalculationUnit
 
     public Guid GraphId { get; set; }
 
-    public IRequest Request { get; set; }
+    public required IRequest Request { get; set; }
 
     public string? JobId { get; set; }
 
