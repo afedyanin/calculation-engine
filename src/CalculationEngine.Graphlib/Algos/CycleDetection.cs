@@ -39,14 +39,14 @@ public static class CycleDetection
             recStack[vertex.Index] = true;
 
             // Recur for all the vertices adjacent to this vertex
-            foreach (var neighbor in vertex.Neighbors)
+            foreach (var child in vertex.Children)
             {
-                if (!visited[neighbor.Index] &&
-                    graph.HasAnyCycle(neighbor, visited, recStack))
+                if (!visited[child.Index] &&
+                    graph.HasAnyCycle(child, visited, recStack))
                 {
                     return true;
                 }
-                else if (recStack[neighbor.Index])
+                else if (recStack[child.Index])
                 {
                     return true;
                 }

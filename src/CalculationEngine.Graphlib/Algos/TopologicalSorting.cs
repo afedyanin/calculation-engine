@@ -39,11 +39,11 @@ public static class TopologicalSorting
         visited[vertex.Index] = true;
 
         // Recur for all adjacent vertices
-        foreach (var neighbor in vertex.Neighbors)
+        foreach (var child in vertex.Children)
         {
-            if (!visited[neighbor.Index])
+            if (!visited[child.Index])
             {
-                graph.TopologicalSort(neighbor, visited, stack);
+                graph.TopologicalSort(child, visited, stack);
             }
         }
 

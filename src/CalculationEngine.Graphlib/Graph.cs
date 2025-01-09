@@ -11,7 +11,7 @@ public class Graph<T> where T : class
             Vertex<T> vFrom = Vertices[from];
             Vertex<T> vTo = Vertices[to];
 
-            int i = vFrom.Neighbors.IndexOf(vTo);
+            int i = vFrom.Children.IndexOf(vTo);
             if (i < 0)
             {
                 return null;
@@ -44,18 +44,18 @@ public class Graph<T> where T : class
 
     public void AddEdge(Vertex<T> from, Vertex<T> to)
     {
-        from.Neighbors.Add(to);
+        from.Children.Add(to);
     }
 
     public bool RemoveEdge(Vertex<T> from, Vertex<T> to)
     {
-        int index = from.Neighbors.FindIndex(n => n == to);
+        int index = from.Children.FindIndex(n => n == to);
         if (index < 0)
         {
             return false;
         }
 
-        from.Neighbors.RemoveAt(index);
+        from.Children.RemoveAt(index);
         return true;
     }
 
@@ -65,12 +65,12 @@ public class Graph<T> where T : class
 
         foreach (Vertex<T> from in Vertices)
         {
-            for (int i = 0; i < from.Neighbors.Count; i++)
+            for (int i = 0; i < from.Children.Count; i++)
             {
                 Edge<T> edge = new()
                 {
                     From = from,
-                    To = from.Neighbors[i],
+                    To = from.Children[i],
                 };
                 edges.Add(edge);
             }

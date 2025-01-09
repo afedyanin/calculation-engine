@@ -23,12 +23,12 @@ public static class BreadthFirstSearch
         {
             var next = queue.Dequeue();
             result.Add(next);
-            foreach (var neighbor in next.Neighbors)
+            foreach (var child in next.Children)
             {
-                if (!visited[neighbor.Index])
+                if (!visited[child.Index])
                 {
-                    visited[neighbor.Index] = true;
-                    queue.Enqueue(neighbor);
+                    visited[child.Index] = true;
+                    queue.Enqueue(child);
                 }
             }
         }

@@ -22,11 +22,11 @@ public static class DepthFirstSearch
         result.Add(vertex);
         visited[vertex.Index] = true;
 
-        foreach (var neighbor in vertex.Neighbors)
+        foreach (var child in vertex.Children)
         {
-            if (!visited[neighbor.Index])
+            if (!visited[child.Index])
             {
-                graph.DFS(neighbor, visited, result);
+                graph.DFS(child, visited, result);
             }
         }
     }
