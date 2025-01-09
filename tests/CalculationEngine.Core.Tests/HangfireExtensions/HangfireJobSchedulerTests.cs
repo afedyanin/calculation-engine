@@ -21,7 +21,7 @@ public class HangfireJobSchedulerTests : HangfireClientTestBase
     [Test]
     public void CanEnqueueGraph()
     {
-        var graph = new CalculationGraph();
+        var graph = new CalculationGraphOld();
         var request = new DelayRequest();
 
         var rootNode = graph.AddRoot(request);

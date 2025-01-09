@@ -12,7 +12,7 @@ public class CalculationGraphTests
     [SetUp]
     public void SetUp()
     {
-        _graph = new CalculationGraph();
+        _graph = new CalculationGraphOld();
         _scheduler = new JobSchedulerStub();
     }
 

@@ -2,14 +2,14 @@ using System.Text;
 using MediatR;
 
 namespace CalculationEngine.Core.GraphModel;
-public class CalculationGraph : ICalculationGraph
+public class CalculationGraphOld : ICalculationGraph
 {
     private readonly LinkedList<INode> _rootNodes;
     private readonly LinkedList<INode> _joinNodes;
 
     public Guid Id { get; }
 
-    public CalculationGraph()
+    public CalculationGraphOld()
     {
         Id = Guid.NewGuid();
         _rootNodes = new LinkedList<INode>();
