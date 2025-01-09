@@ -11,6 +11,8 @@ public class CalculationEngineDbContext : DbContext
 
     public DbSet<CalculationResultItem> CalculationResultItems { get; set; }
 
+    public DbSet<CalculationUnit> CalculationUnits { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<CalculationResultItem>(entity =>
@@ -32,6 +34,25 @@ public class CalculationEngineDbContext : DbContext
             entity.Property(e => e.PayloadJson)
                 .HasColumnType("jsonb")
                 .HasColumnName("payload_json");
+        });
+
+        modelBuilder.Entity<CalculationUnit>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("calculation_unit_pkey");
+
+            entity.ToTable("calculation_unit");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+
+            entity.Property(e => e.GraphId)
+                .IsRequired()
+                .HasColumnName("graph_id");
+
+            entity.Property(e => e.JobId).HasColumnName("job_id");
+
+            // TODO?
+            //entity.Property(e => e.Request).HasColumnName("request_json");
+            //entity.Property(e => e.CalculationResults).HasColumnName("calculation_results");
         });
     }
 }
