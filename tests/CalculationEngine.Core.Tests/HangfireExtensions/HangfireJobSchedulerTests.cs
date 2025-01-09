@@ -43,7 +43,7 @@ public class HangfireJobSchedulerTests : HangfireClientTestBase
     {
         var request = new DelayRequest
         {
-            CorrelationId = Guid.NewGuid(),
+            CalculationUnitId = Guid.NewGuid(),
             Delay = TimeSpan.FromSeconds(1),
         };
 
@@ -59,7 +59,7 @@ public class HangfireJobSchedulerTests : HangfireClientTestBase
     {
         var request = new DelayRequest
         {
-            CorrelationId = Guid.NewGuid(),
+            CalculationUnitId = Guid.NewGuid(),
             Delay = TimeSpan.FromSeconds(1),
         };
 
@@ -85,7 +85,7 @@ public class HangfireJobSchedulerTests : HangfireClientTestBase
     {
         var request = new DelayRequest
         {
-            CorrelationId = Guid.NewGuid(),
+            CalculationUnitId = Guid.NewGuid(),
             Delay = TimeSpan.FromSeconds(1),
         };
 
@@ -99,7 +99,7 @@ public class HangfireJobSchedulerTests : HangfireClientTestBase
         var awaitRequest = new JobAwaitingRequest
         {
             JobIds = jobIds,
-            CorrelationId = request.CorrelationId,
+            CalculationUnitId = request.CalculationUnitId,
             PoolingInterval = TimeSpan.FromSeconds(1),
         };
 

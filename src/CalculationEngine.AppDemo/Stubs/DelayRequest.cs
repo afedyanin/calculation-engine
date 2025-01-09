@@ -1,9 +1,10 @@
-using MediatR;
+using CalculationEngine.Core.Handlers;
 
 namespace CalculationEngine.AppDemo.Stubs;
 
-public class DelayRequest : IRequest
+public class DelayRequest : ICalculationRequest
 {
-    public Guid CorrelationId { get; set; }
+    public Guid CalculationUnitId { get; set; }
+
     public TimeSpan Delay { get; set; }
 }

@@ -13,8 +13,8 @@ internal class DelayRequestHandler : IRequestHandler<DelayRequest>
 
     public async Task Handle(DelayRequest request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Starting delay for {request.CorrelationId}");
+        _logger.LogInformation($"Starting delay for {request.CalculationUnitId}");
         await Task.Delay(request.Delay, cancellationToken);
-        _logger.LogInformation($"Delay for {request.CorrelationId} completed.");
+        _logger.LogInformation($"Delay for {request.CalculationUnitId} completed.");
     }
 }

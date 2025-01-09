@@ -8,7 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.4.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CalculationEngine.Core\CalculationEngine.Core.csproj" />
   </ItemGroup>
 
 </Project>

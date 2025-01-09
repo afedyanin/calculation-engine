@@ -1,14 +1,14 @@
+using CalculationEngine.Core.Handlers;
 using CalculationEngine.Core.Model;
 using CalculationEngine.Graphlib;
 using CalculationEngine.Graphlib.Algos;
-using MediatR;
 using System.Text;
 
 namespace CalculationEngine.Core.Extensions;
 
 public static class CalculationGraphExtensions
 {
-    public static Vertex<CalculationUnit> AddCalculationVertex(this CalculationGraph graph, IRequest request)
+    public static Vertex<CalculationUnit> AddCalculationVertex(this CalculationGraph graph, ICalculationRequest request)
     {
         var unit = new CalculationUnit
         {

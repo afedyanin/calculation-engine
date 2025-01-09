@@ -1,4 +1,4 @@
-using MediatR;
+using CalculationEngine.Core.Handlers;
 
 namespace CalculationEngine.Core.Model;
 
@@ -8,9 +8,9 @@ public class CalculationUnit
 
     public Guid GraphId { get; set; }
 
-    public required IRequest Request { get; set; }
+    public required ICalculationRequest Request { get; set; }
 
     public string? JobId { get; set; }
 
-    public IEnumerable<CalculationResultItem> CalculationResults { get; set; } = [];
+    public IEnumerable<CalculationResultItem> Results { get; set; } = [];
 }

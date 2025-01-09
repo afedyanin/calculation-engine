@@ -11,7 +11,7 @@ public class HandlerTests : HangfireClientTestBase
     {
         var request = new DelayRequest
         {
-            CorrelationId = Guid.NewGuid(),
+            CalculationUnitId = Guid.NewGuid(),
             Delay = TimeSpan.FromSeconds(1),
         };
 
@@ -28,3 +28,4 @@ public class HandlerTests : HangfireClientTestBase
         Assert.Pass();
     }
 }
+
