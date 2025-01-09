@@ -31,7 +31,7 @@ public class JoinNode : NodeBase
         var jobAwatingRequest = new JobAwaitingRequest
         {
             JobIds = ids,
-            CorrelationId = Graph.Id,
+            CalculationUnitId = Graph.Id,
             PoolingInterval = _poolingInterval
         };
 

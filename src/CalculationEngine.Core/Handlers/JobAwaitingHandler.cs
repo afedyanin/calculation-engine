@@ -40,11 +40,11 @@ internal class JobAwaitingHandler : IRequestHandler<JobAwaitingRequest>
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                _logger.LogWarning($"Cancel waiting for jobs completed. JobIds={string.Join(',', request.JobIds)} CorrelationId={request.CorrelationId}");
+                _logger.LogWarning($"Cancel waiting for jobs completed. JobIds={string.Join(',', request.JobIds)} CorrelationId={request.CalculationUnitId}");
                 break;
             }
 
-            _logger.LogDebug($"Waiting for jobs completed. JobIds={string.Join(',', request.JobIds)} CorrelationId={request.CorrelationId}");
+            _logger.LogDebug($"Waiting for jobs completed. JobIds={string.Join(',', request.JobIds)} CorrelationId={request.CalculationUnitId}");
             await Task.Delay(request.PoolingInterval, cancellationToken);
         }
     }
