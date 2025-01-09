@@ -1,4 +1,3 @@
-using System.Text.Json;
 using CalculationEngine.Core.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,14 +19,12 @@ public class CalculationResultItemTests : DbTestBase
     public void CanCreateCalculationResultItem()
     {
         var record = new SimpleRecord(Guid.NewGuid(), "Just Record", DateTime.UtcNow, 1234.56M);
-        var recordJson = JsonSerializer.Serialize(record);
         var result = new CalculationResultItem()
         {
             Id = Guid.NewGuid(),
             CalculationUnitId = Guid.NewGuid(),
             Name = "Name",
-            Metadata = "Metadata",
-            PayloadJson = recordJson
+            Content = record,
         };
 
         Context.CalculationResultItems.Add(result);
@@ -40,11 +37,11 @@ public class CalculationResultItemTests : DbTestBase
         {
             Assert.That(saved.CalculationUnitId, Is.EqualTo(result.CalculationUnitId));
             Assert.That(saved.Name, Is.EqualTo(result.Name));
-            Assert.That(saved.Metadata, Is.EqualTo(result.Metadata));
-            Assert.That(saved.PayloadJson, Is.EqualTo(result.PayloadJson));
+            Assert.That(saved.ContentJson, Is.EqualTo(result.ContentJson));
+            Assert.That(saved.ContentType, Is.EqualTo(result.ContentType));
         });
 
-        var restored = JsonSerializer.Deserialize<SimpleRecord>(saved.PayloadJson);
+        var restored = saved.Content as SimpleRecord;
 
         Assert.That(restored, Is.Not.Null);
 

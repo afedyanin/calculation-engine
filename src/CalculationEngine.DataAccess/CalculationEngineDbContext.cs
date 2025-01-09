@@ -17,11 +17,13 @@ public class CalculationEngineDbContext : DbContext
     {
         modelBuilder.Entity<CalculationResultItem>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("calculation_result_item_pkey");
-
             entity.ToTable("calculation_result_item");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.HasKey(e => e.Id)
+                .HasName("calculation_result_item_pkey");
+
+            entity.Property(e => e.Id)
+                .HasColumnName("id");
 
             entity.Property(e => e.CalculationUnitId)
                 .IsRequired()
@@ -29,30 +31,53 @@ public class CalculationEngineDbContext : DbContext
 
             entity.Property(e => e.Name).HasColumnName("name");
 
-            entity.Property(e => e.Metadata).HasColumnName("metadata");
+            entity.Property(e => e.ContentType)
+                .HasField("_contentType")
+                .HasColumnName("content_type");
 
-            entity.Property(e => e.PayloadJson)
-                .HasColumnType("jsonb")
-                .HasColumnName("payload_json");
+            entity.Property(e => e.ContentJson)
+                .HasField("_contentJson")
+                .HasColumnName("content_json")
+                .HasColumnType("jsonb");
+
+            entity.Ignore(e => e.Content);
+
+            entity.HasOne(e => e.CalculationUnit)
+                .WithMany(e => e.Results)
+                .HasForeignKey(e => e.CalculationUnitId)
+                .IsRequired();
         });
 
         modelBuilder.Entity<CalculationUnit>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("calculation_unit_pkey");
-
             entity.ToTable("calculation_unit");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.HasKey(e => e.Id)
+                .HasName("calculation_unit_pkey");
+
+            entity.Property(e => e.Id)
+                .HasColumnName("id");
 
             entity.Property(e => e.GraphId)
                 .IsRequired()
                 .HasColumnName("graph_id");
 
-            entity.Property(e => e.JobId).HasColumnName("job_id");
+            entity.Property(e => e.JobId)
+                .HasColumnName("job_id");
 
-            // TODO?
-            //entity.Property(e => e.Request).HasColumnName("request_json");
-            //entity.Property(e => e.CalculationResults).HasColumnName("calculation_results");
+            entity.Property("_requestType")
+                .HasColumnName("request_type");
+
+            entity.Property("_requestJson")
+                .HasColumnName("request_json")
+                .HasColumnType("jsonb");
+
+            entity.Ignore(e => e.Request);
+
+            entity.HasMany(e => e.Results)
+                .WithOne(e => e.CalculationUnit)
+                .HasForeignKey(e => e.CalculationUnitId)
+                .IsRequired();
         });
     }
 }

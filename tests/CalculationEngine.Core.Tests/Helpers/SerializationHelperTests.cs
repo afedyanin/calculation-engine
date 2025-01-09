@@ -64,9 +64,13 @@ public class SerializationHelperTests
 
         (var json, var typeString) = SerializationHelper.Serialize(request);
 
+        var type = Type.GetType(typeString);
         var restored = SerializationHelper.Deserialize(json, typeString);
 
         Assert.That(restored, Is.Not.Null);
-        Assert.That(restored.GetType(), Is.EqualTo(Type.GetType(typeString)));
+        Assert.That(restored.GetType(), Is.EqualTo(type));
+
+        var typed = restored as DelayRequest;
+        Console.WriteLine($"CalculationUnitId={typed.CalculationUnitId} Delay={typed.Delay}");
     }
 }
