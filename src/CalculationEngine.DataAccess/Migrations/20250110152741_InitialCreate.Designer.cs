@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CalculationEngine.DataAccess.Migrations
 {
     [DbContext(typeof(CalculationEngineDbContext))]
-    [Migration("20250110130420_InitialCreate")]
+    [Migration("20250110152741_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -106,7 +106,7 @@ namespace CalculationEngine.DataAccess.Migrations
             modelBuilder.Entity("CalculationEngine.Core.Model.CalculationResultItem", b =>
                 {
                     b.HasOne("CalculationEngine.Core.Model.CalculationUnit", "CalculationUnit")
-                        .WithMany("Results")
+                        .WithMany()
                         .HasForeignKey("CalculationUnitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -146,11 +146,6 @@ namespace CalculationEngine.DataAccess.Migrations
                         });
 
                     b.Navigation("Vertices");
-                });
-
-            modelBuilder.Entity("CalculationEngine.Core.Model.CalculationUnit", b =>
-                {
-                    b.Navigation("Results");
                 });
 #pragma warning restore 612, 618
         }

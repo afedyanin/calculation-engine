@@ -103,7 +103,7 @@ namespace CalculationEngine.DataAccess.Migrations
             modelBuilder.Entity("CalculationEngine.Core.Model.CalculationResultItem", b =>
                 {
                     b.HasOne("CalculationEngine.Core.Model.CalculationUnit", "CalculationUnit")
-                        .WithMany("Results")
+                        .WithMany()
                         .HasForeignKey("CalculationUnitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -143,11 +143,6 @@ namespace CalculationEngine.DataAccess.Migrations
                         });
 
                     b.Navigation("Vertices");
-                });
-
-            modelBuilder.Entity("CalculationEngine.Core.Model.CalculationUnit", b =>
-                {
-                    b.Navigation("Results");
                 });
 #pragma warning restore 612, 618
         }

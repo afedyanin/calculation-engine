@@ -4,27 +4,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CalculationEngine.DataAccess.Repositories;
 
-internal class CalculationUnitRepository : ICalculationUnitRepository
+internal class CalculationUnitRepository : RepositoryBase, ICalculationUnitRepository
 {
-    private readonly IDbContextFactory<CalculationEngineDbContext> _contextFactory;
-
     public CalculationUnitRepository(IDbContextFactory<CalculationEngineDbContext> contextFactory)
+        : base(contextFactory)
     {
-        _contextFactory = contextFactory;
     }
 
     public async Task<CalculationUnit?> GetById(Guid id, CancellationToken cancellationToken = default)
     {
-        using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+        using var context = await GetDbContext();
 
-        var calculationUnit = await context.CalculationUnits.FindAsync(id);
+        var calculationUnit = await context
+            .CalculationUnits
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         return calculationUnit;
     }
 
     public async Task<IEnumerable<CalculationUnit>> GetByGraphId(Guid graphId, CancellationToken cancellationToken = default)
     {
-        using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+        using var context = await GetDbContext();
 
         var calculationUnits = await context
             .CalculationUnits
@@ -35,22 +36,9 @@ internal class CalculationUnitRepository : ICalculationUnitRepository
         return calculationUnits;
     }
 
-    public async Task<IEnumerable<CalculationResultItem>> GetResults(Guid calculationUnitId, CancellationToken cancellationToken = default)
-    {
-        using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-
-        var calculationResults = await context
-            .CalculationResultItems
-            .AsNoTracking()
-            .Where(x => x.CalculationUnitId == calculationUnitId)
-            .ToArrayAsync(cancellationToken);
-
-        return calculationResults;
-    }
-
     public async Task<bool> Update(CalculationUnit calculationUnit, CancellationToken cancellationToken = default)
     {
-        using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+        using var context = await GetDbContext();
 
         var entry = context.CalculationUnits.Update(calculationUnit);
 

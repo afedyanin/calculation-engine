@@ -20,6 +20,8 @@ public class DbTestBase
 
     protected ICalculationGraphRepository CalculationGraphRepository { get; }
 
+    protected ICalculationResultRepository CalculationResultRepository { get; }
+
     public DbTestBase()
     {
         Configuration = InitConfiguration();
@@ -32,6 +34,7 @@ public class DbTestBase
 
         _services.AddTransient<ICalculationUnitRepository, CalculationUnitRepository>();
         _services.AddTransient<ICalculationGraphRepository, CalculationGraphRepository>();
+        _services.AddTransient<ICalculationResultRepository, CalculationResultRepository>();
 
         _serviceProvider = _services.BuildServiceProvider();
 
@@ -39,6 +42,7 @@ public class DbTestBase
 
         CalculationGraphRepository = _serviceProvider.GetRequiredService<ICalculationGraphRepository>();
         CalculationUnitRepository = _serviceProvider.GetRequiredService<ICalculationUnitRepository>();
+        CalculationResultRepository = _serviceProvider.GetRequiredService<ICalculationResultRepository>();
     }
 
     private static IConfiguration InitConfiguration()

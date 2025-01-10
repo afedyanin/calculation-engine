@@ -46,6 +46,4 @@ public class CalculationUnit
             (_requestJson, _requestType) = SerializationHelper.Serialize(_request);
         }
     }
-
-    public ICollection<CalculationResultItem> Results { get; } = [];
 }

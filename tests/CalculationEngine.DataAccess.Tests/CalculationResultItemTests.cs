@@ -93,23 +93,19 @@ public class CalculationResultItemTests : DbTestBase
             Content = record,
         };
 
-        unit.Results.Add(result);
-
         using var context = ContextFactory.CreateDbContext();
 
-        context.CalculationResultItems.Add(result);
         context.CalculationUnits.Add(unit);
+        context.CalculationResultItems.Add(result);
         context.SaveChanges();
 
         using var context2 = ContextFactory.CreateDbContext();
+
         var restored = context2
-            .CalculationUnits
-            .Include(cu => cu.Results)
-            .SingleOrDefault(cu => cu.Id == unit.Id);
+            .CalculationResultItems
+            .SingleOrDefault(r => r.CalculationUnitId == unit.Id);
 
         Assert.That(restored, Is.Not.Null);
-        Assert.That(restored.Results, Is.Not.Empty);
-        Assert.That(restored.Results.FirstOrDefault(r => r.Id == result.Id), Is.Not.Null);
     }
 
     [Test]
@@ -138,57 +134,49 @@ public class CalculationResultItemTests : DbTestBase
             Content = record,
         };
 
-        unit.Results.Add(result);
-
         using var context = ContextFactory.CreateDbContext();
-        context.CalculationResultItems.Add(result);
+
         context.CalculationUnits.Add(unit);
+        context.CalculationResultItems.Add(result);
+
         context.SaveChanges();
 
         using var context2 = ContextFactory.CreateDbContext();
 
         var restored = context2
-            .CalculationUnits
-            .Include(cu => cu.Results)
-            .SingleOrDefault(cu => cu.Id == unit.Id);
+            .CalculationResultItems
+            .SingleOrDefault(r => r.CalculationUnitId == unit.Id);
 
         Assert.That(restored, Is.Not.Null);
 
-        var item = restored.Results.FirstOrDefault(r => r.Id == result.Id);
-        Assert.That(item, Is.Not.Null);
-
         var updatedRecord = new SimpleRecord(Guid.NewGuid(), "Updated Record", DateTime.UtcNow, 98765.43M);
 
-        item.Content = updatedRecord;
-        item.Name = "Updated";
+        restored.Content = updatedRecord;
+        restored.Name = "Updated";
 
         context2.SaveChanges();
 
         using var context3 = ContextFactory.CreateDbContext();
 
-        var saved_item = context3.CalculationResultItems.SingleOrDefault(i => i.Id == item.Id);
+        var saved_item = context3.CalculationResultItems.SingleOrDefault(i => i.Id == restored.Id);
         Assert.That(saved_item, Is.Not.Null);
 
         Assert.Multiple(() =>
         {
-            Assert.That(saved_item.Name, Is.EqualTo(item.Name));
-            Assert.That(saved_item.Content, Is.EqualTo(item.Content));
+            Assert.That(saved_item.Name, Is.EqualTo(restored.Name));
+            Assert.That(saved_item.Content, Is.EqualTo(restored.Content));
         });
 
         var unit_restored = context3
-            .CalculationUnits
-            .Include(cu => cu.Results)
-            .SingleOrDefault(cu => cu.Id == unit.Id);
+            .CalculationResultItems
+            .SingleOrDefault(r => r.CalculationUnitId == unit.Id);
 
         Assert.That(unit_restored, Is.Not.Null);
 
-        var item_restored = unit_restored.Results.FirstOrDefault(r => r.Id == item.Id);
-        Assert.That(item_restored, Is.Not.Null);
-
         Assert.Multiple(() =>
         {
-            Assert.That(item_restored.Name, Is.EqualTo(item.Name));
-            Assert.That(item_restored.Content, Is.EqualTo(item.Content));
+            Assert.That(unit_restored.Name, Is.EqualTo(saved_item.Name));
+            Assert.That(unit_restored.Content, Is.EqualTo(saved_item.Content));
         });
     }
 }

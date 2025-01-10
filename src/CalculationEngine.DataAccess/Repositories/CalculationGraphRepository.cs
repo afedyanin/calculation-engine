@@ -5,20 +5,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CalculationEngine.DataAccess.Repositories;
 
-internal class CalculationGraphRepository : ICalculationGraphRepository
+internal class CalculationGraphRepository : RepositoryBase, ICalculationGraphRepository
 {
-    private readonly IDbContextFactory<CalculationEngineDbContext> _contextFactory;
-
     public CalculationGraphRepository(IDbContextFactory<CalculationEngineDbContext> contextFactory)
+        : base(contextFactory)
     {
-        _contextFactory = contextFactory;
     }
 
     public async Task<CalculationGraph?> GetById(Guid id, CancellationToken cancellationToken = default)
     {
-        using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+        using var context = await GetDbContext();
 
-        var graphDbo = await context.Graphs.FindAsync(id);
+        var graphDbo = await context
+            .Graphs
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         if (graphDbo == null)
         {
@@ -29,15 +30,15 @@ internal class CalculationGraphRepository : ICalculationGraphRepository
         return graph;
     }
 
-    public async Task<bool> Save(CalculationGraph graph, CancellationToken cancellationToken = default)
+    public async Task<bool> Insert(CalculationGraph graph, CancellationToken cancellationToken = default)
     {
         var graphDbo = graph.ToDbo();
         var units = graph.Vertices.Select(v => v.Value);
 
-        using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+        using var context = await GetDbContext();
 
-        await context.Graphs.AddAsync(graphDbo, cancellationToken);
-        await context.CalculationUnits.AddRangeAsync(units, cancellationToken);
+        context.Graphs.Add(graphDbo);
+        context.CalculationUnits.AddRange(units);
 
         var savedRecords = await context.SaveChangesAsync(cancellationToken);
 
@@ -46,11 +47,9 @@ internal class CalculationGraphRepository : ICalculationGraphRepository
 
     public async Task<bool> Delete(Guid id, CancellationToken cancellationToken = default)
     {
-        using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+        using var context = await GetDbContext();
 
-        var graphDbo = await context
-            .Graphs
-            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var graphDbo = await context.Graphs.FindAsync(id, cancellationToken);
 
         if (graphDbo == null)
         {
@@ -60,9 +59,9 @@ internal class CalculationGraphRepository : ICalculationGraphRepository
         var unitIds = graphDbo.Vertices.Select(v => v.ValueId);
         if (unitIds.Any())
         {
-            // TODO: Enshure calculation results is deleted
             var units = context.CalculationUnits.Where(u => unitIds.Contains(u.Id));
             context.CalculationUnits.RemoveRange(units);
+            RemoveResultItems(unitIds, context);
         }
 
         context.Graphs.Remove(graphDbo);
@@ -70,5 +69,17 @@ internal class CalculationGraphRepository : ICalculationGraphRepository
         var savedRecords = await context.SaveChangesAsync(cancellationToken);
 
         return savedRecords > 0;
+    }
+
+    private void RemoveResultItems(IEnumerable<Guid> calculationUnitIds, CalculationEngineDbContext context)
+    {
+        foreach (var unitId in calculationUnitIds)
+        {
+            var resultItems = context.CalculationResultItems.Where(i => i.CalculationUnitId == unitId);
+            if (resultItems.Any())
+            {
+                context.CalculationResultItems.RemoveRange(resultItems);
+            }
+        }
     }
 }

@@ -46,7 +46,7 @@ public class CalculationEngineDbContext : DbContext
             entity.Ignore(e => e.Content);
 
             entity.HasOne(e => e.CalculationUnit)
-                .WithMany(e => e.Results)
+                .WithMany()
                 .HasForeignKey(e => e.CalculationUnitId)
                 .IsRequired();
         });
@@ -76,11 +76,6 @@ public class CalculationEngineDbContext : DbContext
                 .HasColumnType("jsonb");
 
             entity.Ignore(e => e.Request);
-
-            entity.HasMany(e => e.Results)
-                .WithOne(e => e.CalculationUnit)
-                .HasForeignKey(e => e.CalculationUnitId)
-                .IsRequired();
         });
 
         modelBuilder.Entity<GraphDbo>(entity =>

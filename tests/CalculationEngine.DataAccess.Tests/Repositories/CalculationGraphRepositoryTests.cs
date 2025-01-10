@@ -1,5 +1,4 @@
 using CalculationEngine.Core.Extensions;
-using CalculationEngine.Core.Model;
 
 namespace CalculationEngine.DataAccess.Tests.Repositories;
 
@@ -7,11 +6,11 @@ namespace CalculationEngine.DataAccess.Tests.Repositories;
 public class CalculationGraphRepositoryTests : DbTestBase
 {
     [Test]
-    public async Task CanSaveSimpleGraph()
+    public async Task CanInsertSimpleGraph()
     {
         var graph = GraphStubs.CreateSimpleGraph();
 
-        var isSaved = await CalculationGraphRepository.Save(graph);
+        var isSaved = await CalculationGraphRepository.Insert(graph);
 
         Assert.That(isSaved, Is.True);
 
@@ -21,11 +20,11 @@ public class CalculationGraphRepositoryTests : DbTestBase
     }
 
     [Test]
-    public async Task CanLoadSimpleGraph()
+    public async Task CanGetSimpleGraph()
     {
         var graph = GraphStubs.CreateSimpleGraph();
 
-        var isSaved = await CalculationGraphRepository.Save(graph);
+        var isSaved = await CalculationGraphRepository.Insert(graph);
         Assert.That(isSaved, Is.True);
 
         var loaded = await CalculationGraphRepository.GetById(graph.Id);
@@ -42,42 +41,12 @@ public class CalculationGraphRepositoryTests : DbTestBase
     {
         var graph = GraphStubs.CreateSimpleGraph();
 
-        var isSaved = await CalculationGraphRepository.Save(graph);
+        var isSaved = await CalculationGraphRepository.Insert(graph);
         Assert.That(isSaved, Is.True);
 
         var isDeleted = await CalculationGraphRepository.Delete(graph.Id);
         Assert.That(isDeleted, Is.True);
 
         Console.WriteLine($"Deleted Id={graph.Id}");
-    }
-
-    [Test]
-    public async Task CanDeleteSimpleGraphWithResultSet()
-    {
-        var graph = GraphStubs.CreateSimpleGraph();
-
-        var isSaved = await CalculationGraphRepository.Save(graph);
-        Assert.That(isSaved, Is.True);
-
-        var v2 = graph.Vertices[1];
-        var record = new SimpleRecord(Guid.NewGuid(), "Just Record", DateTime.UtcNow, 1234.56M);
-
-        var result = new CalculationResultItem()
-        {
-            Id = Guid.NewGuid(),
-            CalculationUnitId = v2.Value.Id,
-            Name = "Name",
-            Content = record,
-        };
-
-        v2.Value.Results.Add(result);
-
-        var isUnitSaved = await CalculationUnitRepository.Update(v2.Value);
-        Assert.That(isUnitSaved, Is.True);
-
-        var isDeleted = await CalculationGraphRepository.Delete(graph.Id);
-        Assert.That(isDeleted, Is.True);
-
-        Console.WriteLine($"Deleted Id={graph.Id} UnitId={v2.Value.Id} ResultId={result.Id}");
     }
 }

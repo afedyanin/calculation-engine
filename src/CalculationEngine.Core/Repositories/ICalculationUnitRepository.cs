@@ -7,7 +7,5 @@ public interface ICalculationUnitRepository
 
     Task<IEnumerable<CalculationUnit>> GetByGraphId(Guid graphId, CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<CalculationResultItem>> GetResults(Guid calculationUnitId, CancellationToken cancellationToken = default);
-
     Task<bool> Update(CalculationUnit calculationUnit, CancellationToken cancellationToken = default);
 }

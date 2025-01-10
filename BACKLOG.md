@@ -1,3 +1,8 @@
+# 2025-01-10
+
+https://stackoverflow.com/questions/16195847/does-ef-upsert-have-to-be-done-manually
+
+
 # 2025-01-09
 
 ## TODO DAL
