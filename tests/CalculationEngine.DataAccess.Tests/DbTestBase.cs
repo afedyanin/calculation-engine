@@ -1,23 +1,40 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace CalculationEngine.DataAccess.Tests;
 
-public class DbTestBase : IDisposable
+public class DbTestBase
 {
-    private static readonly string _connectionString = "Server=localhost;Port=5432;Database=calculation_engine;User Id=postgres;Password=admin;";
+    private readonly IServiceCollection _services;
+    private readonly ServiceProvider _serviceProvider;
 
-    protected CalculationEngineDbContext Context { get; }
+    protected IConfiguration Configuration { get; }
+
+    protected IDbContextFactory<CalculationEngineDbContext> ContextFactory { get; }
 
     public DbTestBase()
     {
-        var builder = new DbContextOptionsBuilder<CalculationEngineDbContext>();
-        builder.UseNpgsql(_connectionString);
+        Configuration = InitConfiguration();
+        _services = new ServiceCollection();
 
-        Context = new CalculationEngineDbContext(builder.Options);
+        _services.AddLogging(builder => builder.AddConsole());
+
+        _services.AddDbContextFactory<CalculationEngineDbContext>(options =>
+            options.UseNpgsql(Configuration.GetConnectionString("CalculationEngineConnection")));
+
+        _serviceProvider = _services.BuildServiceProvider();
+
+        ContextFactory = _serviceProvider.GetRequiredService<IDbContextFactory<CalculationEngineDbContext>>();
     }
 
-    public void Dispose()
+    private static IConfiguration InitConfiguration()
     {
-        Context.Dispose();
+        var config = new ConfigurationBuilder()
+           .AddJsonFile("appsettings.json")
+            .Build();
+
+        return config;
     }
 }

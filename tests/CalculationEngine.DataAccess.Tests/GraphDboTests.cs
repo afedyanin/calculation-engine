@@ -17,8 +17,9 @@ public class GraphDboTests : DbTestBase
             CreatedAt = DateTime.UtcNow,
         };
 
-        Context.Graphs.Add(graph);
-        Context.SaveChanges();
+        using var context = ContextFactory.CreateDbContext();
+        context.Graphs.Add(graph);
+        context.SaveChanges();
 
         Assert.Pass();
     }
@@ -34,10 +35,11 @@ public class GraphDboTests : DbTestBase
             CreatedAt = DateTime.UtcNow,
         };
 
-        Context.Graphs.Add(graph);
-        Context.SaveChanges();
+        using var context = ContextFactory.CreateDbContext();
+        context.Graphs.Add(graph);
+        context.SaveChanges();
 
-        var restored = Context.Graphs.Where(x => x.Id == graph.Id).SingleOrDefault();
+        var restored = context.Graphs.Where(x => x.Id == graph.Id).SingleOrDefault();
 
         Assert.That(restored, Is.Not.Null);
         Assert.That(restored.Vertices, Is.Not.Empty);

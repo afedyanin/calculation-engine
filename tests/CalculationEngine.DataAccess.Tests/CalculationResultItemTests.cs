@@ -12,26 +12,38 @@ public class CalculationResultItemTests : DbTestBase
     [Test]
     public void CanGetCalculationResultItems()
     {
-        var items = Context.CalculationResultItems.AsNoTracking().ToArray();
+        using var context = ContextFactory.CreateDbContext();
+        var items = context.CalculationResultItems.AsNoTracking().ToArray();
         Assert.Pass();
     }
 
     [Test]
     public void CanCreateCalculationResultItem()
     {
+        var unit = new CalculationUnit()
+        {
+            Id = Guid.NewGuid(),
+            GraphId = Guid.NewGuid(),
+            JobId = "None",
+            Request = new DelayRequest(),
+        };
+
+
         var record = new SimpleRecord(Guid.NewGuid(), "Just Record", DateTime.UtcNow, 1234.56M);
         var result = new CalculationResultItem()
         {
             Id = Guid.NewGuid(),
-            CalculationUnitId = Guid.NewGuid(),
+            CalculationUnitId = unit.Id,
             Name = "Name",
             Content = record,
         };
 
-        Context.CalculationResultItems.Add(result);
-        Context.SaveChanges();
+        using var context = ContextFactory.CreateDbContext();
+        context.CalculationUnits.Add(unit);
+        context.CalculationResultItems.Add(result);
+        context.SaveChanges();
 
-        var saved = Context.CalculationResultItems.Where(x => x.Id == result.Id).SingleOrDefault();
+        var saved = context.CalculationResultItems.Where(x => x.Id == result.Id).SingleOrDefault();
 
         Assert.That(saved, Is.Not.Null);
         Assert.Multiple(() =>
@@ -83,11 +95,13 @@ public class CalculationResultItemTests : DbTestBase
 
         unit.Results.Add(result);
 
-        Context.CalculationResultItems.Add(result);
-        Context.CalculationUnits.Add(unit);
-        Context.SaveChanges();
+        using var context = ContextFactory.CreateDbContext();
 
-        var restored = Context
+        context.CalculationResultItems.Add(result);
+        context.CalculationUnits.Add(unit);
+        context.SaveChanges();
+
+        var restored = context
             .CalculationUnits
             .Include(cu => cu.Results)
             .SingleOrDefault(cu => cu.Id == unit.Id);
@@ -125,11 +139,12 @@ public class CalculationResultItemTests : DbTestBase
 
         unit.Results.Add(result);
 
-        Context.CalculationResultItems.Add(result);
-        Context.CalculationUnits.Add(unit);
-        Context.SaveChanges();
+        using var context = ContextFactory.CreateDbContext();
+        context.CalculationResultItems.Add(result);
+        context.CalculationUnits.Add(unit);
+        context.SaveChanges();
 
-        var restored = Context
+        var restored = context
             .CalculationUnits
             .Include(cu => cu.Results)
             .SingleOrDefault(cu => cu.Id == unit.Id);
@@ -144,9 +159,9 @@ public class CalculationResultItemTests : DbTestBase
         item.Content = updatedRecord;
         item.Name = "Updated";
 
-        Context.SaveChanges();
+        context.SaveChanges();
 
-        var saved_item = Context.CalculationResultItems.SingleOrDefault(i => i.Id == item.Id);
+        var saved_item = context.CalculationResultItems.SingleOrDefault(i => i.Id == item.Id);
         Assert.That(saved_item, Is.Not.Null);
 
         Assert.Multiple(() =>
@@ -155,7 +170,7 @@ public class CalculationResultItemTests : DbTestBase
             Assert.That(saved_item.Content, Is.EqualTo(item.Content));
         });
 
-        var unit_restored = Context
+        var unit_restored = context
             .CalculationUnits
             .Include(cu => cu.Results)
             .SingleOrDefault(cu => cu.Id == unit.Id);

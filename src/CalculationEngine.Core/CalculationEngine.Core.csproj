@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="CalculationEngine.Core.Tests"/>
+    <InternalsVisibleTo Include="CalculationEngine.Core.Tests" />
   </ItemGroup>
   
   <ItemGroup>
