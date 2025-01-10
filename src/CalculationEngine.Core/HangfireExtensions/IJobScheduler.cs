@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace CalculationEngine.Core.GraphModel;
+namespace CalculationEngine.Core.HangfireExtensions;
 public interface IJobScheduler
 {
     string Enqueue(IRequest request);

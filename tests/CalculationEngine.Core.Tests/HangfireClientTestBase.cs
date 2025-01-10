@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using CalculationEngine.AppDemo;
-using CalculationEngine.Core.GraphModel;
 using CalculationEngine.Core.HangfireExtensions;
 
 namespace CalculationEngine.Core.Tests;

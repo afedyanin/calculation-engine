@@ -1,4 +1,3 @@
-using CalculationEngine.Core.GraphModel;
 using Hangfire;
 using Hangfire.Common;
 using Hangfire.States;

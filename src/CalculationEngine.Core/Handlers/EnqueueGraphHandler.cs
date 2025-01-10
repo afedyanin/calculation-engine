@@ -1,5 +1,4 @@
-using CalculationEngine.Core.Extensions;
-using CalculationEngine.Core.GraphModel;
+using CalculationEngine.Core.HangfireExtensions;
 using CalculationEngine.Core.Model;
 using CalculationEngine.Core.Repositories;
 using CalculationEngine.Graphlib;
@@ -28,26 +27,24 @@ internal class EnqueueGraphHandler : IRequestHandler<EnqueueGraphRequest, Enqueu
     {
         var graph = await _calculationGraphRepository.GetById(request.GraphId);
 
-        var message = Validate(graph);
+        var errorResponse = Validate(graph);
 
-        if (message != null)
+        if (errorResponse != null)
         {
-            return message;
+            return errorResponse;
         }
 
         var jobs = new HashSet<string>();
-        var vertices = graph!.TopologicalSort();
+        var sortedVertices = graph!.TopologicalSort();
+        var allParents = graph!.GetParents();
 
-        foreach (var vertex in vertices)
+        foreach (var vertex in sortedVertices)
         {
-            var jobId = await EnqueueVertex(vertex, null, cancellationToken);
+            var jobId = await EnqueueVertex(vertex, allParents[vertex.Index]);
             jobs.Add(jobId);
 
-            foreach (var child in vertex.Children)
-            {
-                var childJobId = await EnqueueVertex(child, jobId, cancellationToken);
-                jobs.Add(childJobId);
-            }
+            vertex.Value.JobId = jobId;
+            await _calculationUnitRepository.Update(vertex.Value, cancellationToken);
         }
 
         var jobIds = string.Join(',', jobs);
@@ -62,20 +59,37 @@ internal class EnqueueGraphHandler : IRequestHandler<EnqueueGraphRequest, Enqueu
 
     private async Task<string> EnqueueVertex(
         Vertex<CalculationUnit> vertex,
-        string? parentJobId = null,
-        CancellationToken cancellationToken = default)
+        List<Vertex<CalculationUnit>>? parents)
     {
-        var calculationUnit = vertex.Value;
-
-        if (!string.IsNullOrEmpty(calculationUnit.JobId))
+        if (!string.IsNullOrEmpty(vertex.Value.JobId))
         {
-            return calculationUnit.JobId;
+            // already enqueued
+            return vertex.Value.JobId;
         }
 
-        calculationUnit.JobId = EnqueueCalculationUnit(calculationUnit, parentJobId);
-        await _calculationUnitRepository.Update(calculationUnit, cancellationToken);
+        // Исток
+        if (parents == null || parents.Count == 0)
+        {
+            return _jobScheduler.Enqueue(vertex.Value.Request);
+        }
 
-        return calculationUnit.JobId;
+        // Один источник
+        if (parents.Count == 1)
+        {
+            var parentJobId = parents[0].Value.JobId!;
+            return _jobScheduler.EnqueueAfter(parentJobId, vertex.Value.Request);
+        }
+
+        // Много источников. Нужна синхронизация
+        var parentJobIds = parents.Select(p => p.Value.JobId!).ToArray();
+        var awatingRequest = new JobAwaitingRequest
+        {
+            CalculationUnitId = vertex.Value.Id,
+            JobIds = parentJobIds,
+        };
+
+        var awatingJobId = _jobScheduler.Enqueue(awatingRequest);
+        return _jobScheduler.EnqueueAfter(awatingJobId, vertex.Value.Request);
     }
 
     private EnqueueGraphResponse? Validate(CalculationGraph? graph)
@@ -98,21 +112,6 @@ internal class EnqueueGraphHandler : IRequestHandler<EnqueueGraphRequest, Enqueu
             };
         }
 
-        if (graph.HasInvalidInDegreeVertices())
-        {
-            // TODO: fix graph vertex for inDegree
-            return new EnqueueGraphResponse
-            {
-                Success = false,
-                Message = $"Graph has invalid indegrees vertices. GraphId={graph.Id}"
-            };
-        }
-
         return null;
     }
-
-    private string EnqueueCalculationUnit(CalculationUnit calculationUnit, string? parentJobId = null)
-        => string.IsNullOrEmpty(parentJobId) ?
-            _jobScheduler.Enqueue(calculationUnit.Request) :
-            _jobScheduler.EnqueueAfter(parentJobId, calculationUnit.Request);
 }

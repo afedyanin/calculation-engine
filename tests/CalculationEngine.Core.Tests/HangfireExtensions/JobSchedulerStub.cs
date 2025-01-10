@@ -1,7 +1,7 @@
-using CalculationEngine.Core.GraphModel;
+using CalculationEngine.Core.HangfireExtensions;
 using MediatR;
 
-namespace CalculationEngine.Core.Tests.GraphModel;
+namespace CalculationEngine.Core.Tests.HangfireExtensions;
 
 internal class JobSchedulerStub : IJobScheduler
 {
