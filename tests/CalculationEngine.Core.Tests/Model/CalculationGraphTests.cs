@@ -43,7 +43,7 @@ public class CalculationGraphTests
         graph.AddEdge(v1, v2);
         graph.AddEdge(v2, v3);
 
-        graph.Validate();
+        graph.ThrowIfHasCycles();
 
         Assert.Pass();
     }
@@ -64,6 +64,6 @@ public class CalculationGraphTests
         graph.AddEdge(v2, v3);
         graph.AddEdge(v3, v1);
 
-        Assert.Throws<InvalidOperationException>(() => graph.Validate());
+        Assert.Throws<InvalidOperationException>(() => graph.ThrowIfHasCycles());
     }
 }

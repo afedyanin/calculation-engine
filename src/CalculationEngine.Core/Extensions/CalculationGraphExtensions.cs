@@ -19,12 +19,29 @@ public static class CalculationGraphExtensions
 
         return graph.AddVertex(unit);
     }
-    public static void Validate(this CalculationGraph graph)
+
+    public static void ThrowIfHasCycles(this CalculationGraph graph)
     {
         if (graph.HasAnyCycle())
         {
             throw new InvalidOperationException("Graph has one or more cycles.");
         }
+    }
+
+    public static bool HasInvalidInDegreeVertices(this CalculationGraph graph)
+    {
+        var inDegrees = graph.InDegrees();
+
+        foreach (var vertex in graph.Vertices)
+        {
+            if (inDegrees[vertex.Index] > 1 &&
+                vertex.Value.Request is not JobAwaitingRequest)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static string RenderVertices(this CalculationGraph graph)
