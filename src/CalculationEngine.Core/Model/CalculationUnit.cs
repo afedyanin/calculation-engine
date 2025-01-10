@@ -41,8 +41,9 @@ public class CalculationUnit
         set
         {
             ArgumentNullException.ThrowIfNull(value);
-            (_requestJson, _requestType) = SerializationHelper.Serialize(value);
             _request = value;
+            _request.CalculationUnitId = Id;
+            (_requestJson, _requestType) = SerializationHelper.Serialize(_request);
         }
     }
 
