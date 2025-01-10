@@ -28,14 +28,14 @@ internal class CalculationUnitRepository : ICalculationUnitRepository
 
         var calculationUnits = await context
             .CalculationUnits
-            //.AsNoTracking()
+            .AsNoTracking()
             .Where(x => x.GraphId == graphId)
             .ToArrayAsync(cancellationToken);
 
         return calculationUnits;
     }
 
-    public async Task<IEnumerable<CalculationResultItem>> GetCalculationResults(Guid calculationUnitId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<CalculationResultItem>> GetResults(Guid calculationUnitId, CancellationToken cancellationToken = default)
     {
         using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
 
@@ -52,8 +52,7 @@ internal class CalculationUnitRepository : ICalculationUnitRepository
     {
         using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
 
-        //context.CalculationUnits.Add(calculationUnit);
-        context.CalculationResultItems.AddRange(calculationUnit.Results);
+        var entry = context.CalculationUnits.Update(calculationUnit);
 
         var savedRecords = await context.SaveChangesAsync(cancellationToken);
 
