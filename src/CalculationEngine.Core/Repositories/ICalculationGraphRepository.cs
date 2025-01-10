@@ -4,9 +4,9 @@ namespace CalculationEngine.Core.Repositories;
 
 public interface ICalculationGraphRepository
 {
-    CalculationGraph? GetById(Guid id);
+    Task<CalculationGraph?> GetById(Guid id, CancellationToken cancellationToken = default);
 
-    bool Save(CalculationGraph graph);
+    Task<bool> Save(CalculationGraph graph, CancellationToken cancellationToken = default);
 
-    bool Delete(Guid id);
+    Task<bool> Delete(Guid id, CancellationToken cancellationToken = default);
 }

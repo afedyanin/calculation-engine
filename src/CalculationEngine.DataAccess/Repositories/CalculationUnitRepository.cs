@@ -1,27 +1,65 @@
 using CalculationEngine.Core.Model;
 using CalculationEngine.Core.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace CalculationEngine.DataAccess.Repositories;
 
 internal class CalculationUnitRepository : ICalculationUnitRepository
 {
-    public IEnumerable<CalculationUnit> GetByGraphId(Guid graphId)
+    private readonly IDbContextFactory<CalculationEngineDbContext> _contextFactory;
+
+    public CalculationUnitRepository(IDbContextFactory<CalculationEngineDbContext> contextFactory)
     {
-        throw new NotImplementedException();
+        _contextFactory = contextFactory;
+    }
+    public async Task<CalculationUnit?> GetById(Guid id, CancellationToken cancellationToken = default)
+    {
+        using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+
+        var calculationUnit = await context
+            .CalculationUnits
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        return calculationUnit;
     }
 
-    public CalculationUnit? GetById(Guid id)
+    public async Task<IEnumerable<CalculationUnit>> GetByGraphId(Guid graphId, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+
+        var calculationUnits = await context
+            .CalculationUnits
+            .AsNoTracking()
+            .Where(x => x.GraphId == graphId)
+            .ToArrayAsync(cancellationToken);
+
+        return calculationUnits;
     }
 
-    public IEnumerable<CalculationResultItem> GetCalculationResults(Guid calculationUnitId)
+    public async Task<IEnumerable<CalculationResultItem>> GetCalculationResults(Guid calculationUnitId, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+
+        var calculationResults = await context
+            .CalculationResultItems
+            .AsNoTracking()
+            .Where(x => x.CalculationUnitId == calculationUnitId)
+            .ToArrayAsync(cancellationToken);
+
+        return calculationResults;
     }
 
-    public bool Save(CalculationUnit calculationUnit)
+    public async Task<bool> Save(CalculationUnit calculationUnit, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+
+        await context
+            .CalculationUnits
+            .AddAsync(calculationUnit, cancellationToken);
+
+        var savedRecords = await context.SaveChangesAsync(cancellationToken);
+
+        return savedRecords > 0;
     }
 }

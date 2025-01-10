@@ -5,17 +5,16 @@ namespace CalculationEngine.DataAccess.Repositories;
 
 internal class CalculationGraphRepository : ICalculationGraphRepository
 {
-    public CalculationGraph? GetById(Guid id)
+    public Task<CalculationGraph?> GetById(Guid id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
 
-    public bool Save(CalculationGraph graph)
+    public Task<bool> Save(CalculationGraph graph, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
-
-    public bool Delete(Guid id)
+    public Task<bool> Delete(Guid id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

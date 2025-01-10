@@ -3,11 +3,11 @@ using CalculationEngine.Core.Model;
 namespace CalculationEngine.Core.Repositories;
 public interface ICalculationUnitRepository
 {
-    CalculationUnit? GetById(Guid id);
+    Task<CalculationUnit?> GetById(Guid id, CancellationToken cancellationToken = default);
 
-    IEnumerable<CalculationUnit> GetByGraphId(Guid graphId);
+    Task<IEnumerable<CalculationUnit>> GetByGraphId(Guid graphId, CancellationToken cancellationToken = default);
 
-    IEnumerable<CalculationResultItem> GetCalculationResults(Guid calculationUnitId);
+    Task<IEnumerable<CalculationResultItem>> GetCalculationResults(Guid calculationUnitId, CancellationToken cancellationToken = default);
 
-    bool Save(CalculationUnit calculationUnit);
+    Task<bool> Save(CalculationUnit calculationUnit, CancellationToken cancellationToken = default);
 }
