@@ -1,3 +1,4 @@
+using System.Text;
 using CalculationEngine.Graphlib.Algos;
 using static CalculationEngine.Graphlib.Tests.GraphFactory;
 
@@ -50,5 +51,16 @@ public class TopologicalSortingTests
         var expected = string.Join(',', 5, 4, 2, 3, 1, 0);
 
         Assert.That(actual, Is.EqualTo(expected));
+
+        var inDegress = graph.InDegrees();
+        var sb = new StringBuilder();
+
+        foreach (var index in sorted.Select(x => x.Index))
+        {
+            sb.Append($"{inDegress[index]},");
+        }
+
+        Console.WriteLine($"actual={actual}");
+        Console.WriteLine($"inDegress={sb}");
     }
 }

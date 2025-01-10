@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{9C8591
 		.editorconfig = .editorconfig
 		BACKLOG.md = BACKLOG.md
 		README.md = README.md
+		TEORY.md = TEORY.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9740CDE7-1499-4015-8D34-52B47F85626E}"
