@@ -12,6 +12,7 @@ internal class CalculationUnitRepository : ICalculationUnitRepository
     {
         _contextFactory = contextFactory;
     }
+
     public async Task<CalculationUnit?> GetById(Guid id, CancellationToken cancellationToken = default)
     {
         using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);

@@ -93,9 +93,9 @@ public class CalculationEngineDbContext : DbContext
             entity.Property(e => e.Id)
                 .HasColumnName("id");
 
-            entity.Property(e => e.CreatedAt)
+            entity.Property(e => e.UpdatedAt)
                 .IsRequired()
-                .HasColumnName("created_at");
+                .HasColumnName("updated_at");
 
             entity.OwnsMany(e => e.Vertices,
                 vertexBuilder =>

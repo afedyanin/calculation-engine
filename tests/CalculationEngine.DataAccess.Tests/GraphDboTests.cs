@@ -14,7 +14,7 @@ public class GraphDboTests : DbTestBase
         {
             Id = Guid.NewGuid(),
             Vertices = vertices,
-            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
         };
 
         using var context = ContextFactory.CreateDbContext();
@@ -32,7 +32,7 @@ public class GraphDboTests : DbTestBase
         {
             Id = Guid.NewGuid(),
             Vertices = vertices,
-            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
         };
 
         using var context = ContextFactory.CreateDbContext();
