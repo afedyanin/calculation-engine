@@ -1,4 +1,5 @@
 using CalculationEngine.Core.Model;
+using CalculationEngine.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CalculationEngine.DataAccess;
@@ -12,6 +13,8 @@ public class CalculationEngineDbContext : DbContext
     public DbSet<CalculationResultItem> CalculationResultItems { get; set; }
 
     public DbSet<CalculationUnit> CalculationUnits { get; set; }
+
+    internal DbSet<GraphDbo> Graphs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -79,5 +82,27 @@ public class CalculationEngineDbContext : DbContext
                 .HasForeignKey(e => e.CalculationUnitId)
                 .IsRequired();
         });
+
+        modelBuilder.Entity<GraphDbo>(entity =>
+        {
+            entity.ToTable("calculation_graph");
+
+            entity.HasKey(e => e.Id)
+                .HasName("calculation_graph_pkey");
+
+            entity.Property(e => e.Id)
+                .HasColumnName("id");
+
+            entity.Property(e => e.CreatedAt)
+                .IsRequired()
+                .HasColumnName("created_at");
+
+            entity.OwnsMany(e => e.Vertices,
+                vertexBuilder =>
+                {
+                    vertexBuilder.ToJson("vertices_json");
+                });
+        });
+
     }
 }

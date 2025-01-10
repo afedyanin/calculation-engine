@@ -12,6 +12,19 @@ namespace CalculationEngine.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "calculation_graph",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    vertices_json = table.Column<string>(type: "jsonb", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("calculation_graph_pkey", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "calculation_unit",
                 columns: table => new
                 {
@@ -56,6 +69,9 @@ namespace CalculationEngine.DataAccess.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "calculation_graph");
+
             migrationBuilder.DropTable(
                 name: "calculation_result_item");
 

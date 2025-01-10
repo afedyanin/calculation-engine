@@ -16,7 +16,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="CalculationEngine.DataAccess.Tests" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <ProjectReference Include="..\CalculationEngine.Core\CalculationEngine.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>
