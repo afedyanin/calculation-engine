@@ -18,10 +18,7 @@ internal class CalculationGraphRepository : ICalculationGraphRepository
     {
         using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
 
-        var graphDbo = await context
-            .Graphs
-            .AsNoTracking()
-            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var graphDbo = await context.Graphs.FindAsync(id);
 
         if (graphDbo == null)
         {

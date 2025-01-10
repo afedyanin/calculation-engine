@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CalculationEngine.DataAccess.Migrations
 {
     [DbContext(typeof(CalculationEngineDbContext))]
-    [Migration("20250110080728_InitialCreate")]
+    [Migration("20250110130420_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -93,9 +93,9 @@ namespace CalculationEngine.DataAccess.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id")
                         .HasName("calculation_graph_pkey");

@@ -9,5 +9,5 @@ public interface ICalculationUnitRepository
 
     Task<IEnumerable<CalculationResultItem>> GetCalculationResults(Guid calculationUnitId, CancellationToken cancellationToken = default);
 
-    Task<bool> Save(CalculationUnit calculationUnit, CancellationToken cancellationToken = default);
+    Task<bool> Update(CalculationUnit calculationUnit, CancellationToken cancellationToken = default);
 }

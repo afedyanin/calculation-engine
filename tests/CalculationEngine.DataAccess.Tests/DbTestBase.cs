@@ -1,3 +1,5 @@
+using CalculationEngine.Core.Repositories;
+using CalculationEngine.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +16,10 @@ public class DbTestBase
 
     protected IDbContextFactory<CalculationEngineDbContext> ContextFactory { get; }
 
+    protected ICalculationUnitRepository CalculationUnitRepository { get; }
+
+    protected ICalculationGraphRepository CalculationGraphRepository { get; }
+
     public DbTestBase()
     {
         Configuration = InitConfiguration();
@@ -24,9 +30,15 @@ public class DbTestBase
         _services.AddDbContextFactory<CalculationEngineDbContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("CalculationEngineConnection")));
 
+        _services.AddTransient<ICalculationUnitRepository, CalculationUnitRepository>();
+        _services.AddTransient<ICalculationGraphRepository, CalculationGraphRepository>();
+
         _serviceProvider = _services.BuildServiceProvider();
 
         ContextFactory = _serviceProvider.GetRequiredService<IDbContextFactory<CalculationEngineDbContext>>();
+
+        CalculationGraphRepository = _serviceProvider.GetRequiredService<ICalculationGraphRepository>();
+        CalculationUnitRepository = _serviceProvider.GetRequiredService<ICalculationUnitRepository>();
     }
 
     private static IConfiguration InitConfiguration()
