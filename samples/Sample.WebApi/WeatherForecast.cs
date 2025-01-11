@@ -1,4 +1,4 @@
-namespace CalculationEngine.Server;
+namespace Sample.WebApi;
 
 public class WeatherForecast
 {

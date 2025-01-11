@@ -1,5 +1,5 @@
-using CalculationEngine.AppDemo.Stubs;
 using CalculationEngine.Core.Model;
+using CalculationEngine.DataAccess.Tests.Stubs;
 using Microsoft.EntityFrameworkCore;
 
 namespace CalculationEngine.DataAccess.Tests;

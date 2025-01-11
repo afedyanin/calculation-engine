@@ -9,12 +9,6 @@
   <ItemGroup>
     <PackageReference Include="Hangfire.AspNetCore" Version="1.8.17" />
     <PackageReference Include="Hangfire.PostgreSql" Version="1.20.10" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CalculationEngine.AppDemo\CalculationEngine.AppDemo.csproj" />
-    <ProjectReference Include="..\CalculationEngine.Core\CalculationEngine.Core.csproj" />
   </ItemGroup>
 
 </Project>

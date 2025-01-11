@@ -1,6 +1,6 @@
 using CalculationEngine.Core.Handlers;
 
-namespace CalculationEngine.AppDemo.Stubs;
+namespace CalculationEngine.Core.Tests.Stubs;
 
 public class DelayRequest : ICalculationRequest
 {

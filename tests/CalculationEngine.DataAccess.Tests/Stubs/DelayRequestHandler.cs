@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace CalculationEngine.AppDemo.Stubs;
+namespace CalculationEngine.DataAccess.Tests.Stubs;
 
 internal class DelayRequestHandler : IRequestHandler<DelayRequest>
 {

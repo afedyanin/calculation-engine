@@ -1,4 +1,4 @@
-using CalculationEngine.AppDemo.Stubs;
+using CalculationEngine.Core.Tests.Stubs;
 using Microsoft.Extensions.Logging;
 
 namespace CalculationEngine.Core.Tests.Handlers;

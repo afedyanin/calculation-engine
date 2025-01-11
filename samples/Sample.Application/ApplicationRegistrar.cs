@@ -4,7 +4,7 @@ namespace CalculationEngine.AppDemo;
 
 public static class ApplicationRegistrar
 {
-    public static IServiceCollection AddAppDemo(this IServiceCollection services)
+    public static IServiceCollection AddSampleApp(this IServiceCollection services)
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ApplicationRegistrar).Assembly));
 

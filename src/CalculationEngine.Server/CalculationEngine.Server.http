@@ -1,6 +1,0 @@
-@CalculationEngine.Server_HostAddress = http://localhost:5036
-
-GET {{CalculationEngine.Server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

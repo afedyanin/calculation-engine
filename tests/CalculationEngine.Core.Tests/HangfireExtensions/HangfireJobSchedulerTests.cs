@@ -1,5 +1,5 @@
-using CalculationEngine.AppDemo.Stubs;
 using CalculationEngine.Core.Handlers;
+using CalculationEngine.Core.Tests.Stubs;
 
 namespace CalculationEngine.Core.Tests.HangfireExtensions;
 

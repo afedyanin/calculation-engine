@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace CalculationEngine.AppDemo.SimpleReport;
+namespace Sample.Application.SimpleReport;
 internal class BuildSimpleReportHandler : IRequestHandler<BuildSimpleReportRequest>
 {
     public async Task Handle(BuildSimpleReportRequest request, CancellationToken cancellationToken)

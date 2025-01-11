@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace CalculationEngine.AppDemo.SimpleReport;
+namespace Sample.Application.SimpleReport;
 public class BuildSimpleReportRequest : IRequest
 {
 }

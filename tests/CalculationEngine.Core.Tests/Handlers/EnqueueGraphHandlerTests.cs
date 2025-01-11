@@ -1,11 +1,11 @@
 using System.Text;
-using CalculationEngine.AppDemo.Stubs;
 using CalculationEngine.Core.Extensions;
 using CalculationEngine.Core.Handlers;
 using CalculationEngine.Core.HangfireExtensions;
 using CalculationEngine.Core.Model;
 using CalculationEngine.Core.Repositories;
 using CalculationEngine.Core.Tests.HangfireExtensions;
+using CalculationEngine.Core.Tests.Stubs;
 using CalculationEngine.Graphlib.Algos;
 
 using Moq;

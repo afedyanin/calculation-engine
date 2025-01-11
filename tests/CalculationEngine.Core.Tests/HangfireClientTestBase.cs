@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
-using CalculationEngine.AppDemo;
 using CalculationEngine.Core.HangfireExtensions;
 
 namespace CalculationEngine.Core.Tests;
@@ -50,7 +49,7 @@ public abstract class HangfireClientTestBase
 
         _services.AddLogging(builder => builder.AddConsole());
 
-        _services.AddAppDemo();
+        //_services.AddAppDemo();
 
         _serviceProvider = _services.BuildServiceProvider();
         BackgroundJobClient = _serviceProvider.GetRequiredService<IBackgroundJobClient>();

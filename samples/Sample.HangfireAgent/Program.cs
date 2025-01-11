@@ -1,19 +1,14 @@
+
 using Hangfire;
 using Hangfire.PostgreSql;
-using CalculationEngine.AppDemo;
-using CalculationEngine.Core;
 
-namespace CalculationEngine.Server;
+namespace Sample.HangfireAgent;
 
 public class Program
 {
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
-        builder.Services.AddControllers();
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
 
         builder.Services.AddHangfire(config => config
             .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
@@ -29,22 +24,10 @@ public class Program
         });
 
         // Add Mediator Stuff Here
-        builder.Services.AddAppDemo();
-        builder.Services.AddCalculationEngine();
+        //builder.Services.AddAppDemo();
+        //builder.Services.AddCalculationEngine();
 
         var app = builder.Build();
-
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
-
-        app.UseHttpsRedirection();
-
-        app.UseAuthorization();
-
-        app.MapControllers();
 
         app.UseHangfireDashboard();
 

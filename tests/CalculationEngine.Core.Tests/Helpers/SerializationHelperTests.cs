@@ -1,7 +1,6 @@
 using System.Text.Json;
-using CalculationEngine.AppDemo.Stubs;
 using CalculationEngine.Core.Helpers;
-
+using CalculationEngine.Core.Tests.Stubs;
 using MediatR;
 
 namespace CalculationEngine.Core.Tests.Helpers;

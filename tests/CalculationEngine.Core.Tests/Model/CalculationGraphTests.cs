@@ -1,6 +1,6 @@
-using CalculationEngine.AppDemo.Stubs;
 using CalculationEngine.Core.Model;
 using CalculationEngine.Core.Extensions;
+using CalculationEngine.Core.Tests.Stubs;
 
 namespace CalculationEngine.Core.Tests.Model;
 
