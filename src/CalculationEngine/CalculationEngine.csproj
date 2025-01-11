@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CalculationEngine.Core\CalculationEngine.Core.csproj" />
+    <ProjectReference Include="..\CalculationEngine.DataAccess\CalculationEngine.DataAccess.csproj" />
+    <ProjectReference Include="..\CalculationEngine.Graphlib\CalculationEngine.Graphlib.csproj" />
+  </ItemGroup>
+
+</Project>
