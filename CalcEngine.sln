@@ -7,10 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{9C8591
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		BACKLOG.md = BACKLOG.md
+		Glossary.md = Glossary.md
 		Graph001.png = Graph001.png
 		Hosts.png = Hosts.png
 		README.md = README.md
-		Glossary.md = Glossary.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9740CDE7-1499-4015-8D34-52B47F85626E}"
