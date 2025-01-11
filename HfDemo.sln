@@ -7,8 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{9C8591
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		BACKLOG.md = BACKLOG.md
+		Graph001.png = Graph001.png
+		Hosts.png = Hosts.png
 		README.md = README.md
-		TEORY.md = TEORY.md
+		Glossary.md = Glossary.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9740CDE7-1499-4015-8D34-52B47F85626E}"
@@ -36,6 +38,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Application", "samples\Sample.Application\Sample.Application.csproj", "{915B117A-4A95-4D93-93B0-9590B29B5911}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculationEngine", "src\CalculationEngine\CalculationEngine.csproj", "{C71872AB-B23E-4B2A-BB09-4C065C46A7FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{B4C4EE4D-109D-413C-9969-7654B18EAD12}"
+	ProjectSection(SolutionItems) = preProject
+		docs.md = docs.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
