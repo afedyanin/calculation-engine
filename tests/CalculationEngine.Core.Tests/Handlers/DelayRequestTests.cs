@@ -1,10 +1,10 @@
 using CalculationEngine.AppDemo.Stubs;
 using Microsoft.Extensions.Logging;
 
-namespace CalculationEngine.Core.Tests;
+namespace CalculationEngine.Core.Tests.Handlers;
 
 [TestFixture(Category = "Integration", Explicit = true)]
-public class HandlerTests : HangfireClientTestBase
+public class DelayRequestTests : HangfireClientTestBase
 {
     [Test]
     public async Task CanSendDelayRequest()
@@ -23,7 +23,7 @@ public class HandlerTests : HangfireClientTestBase
     [Test]
     public void CanLogToConsole()
     {
-        var logger = GetLogger<HandlerTests>();
+        var logger = GetLogger<DelayRequestTests>();
         logger.LogWarning("Completed!");
         Assert.Pass();
     }

@@ -1,3 +1,11 @@
+# 2025-01-11
+
+## Moq
+https://habr.com/ru/articles/150859/
+https://github.com/devlooped/moq
+https://metanit.com/sharp/mvc5/18.5.php
+
+
 # 2025-01-10
 
 ## TODO
