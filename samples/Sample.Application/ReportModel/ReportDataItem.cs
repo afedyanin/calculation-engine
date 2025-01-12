@@ -7,8 +7,6 @@ public record class ReportDataItem
 
     public required string Name { get; set; }
 
-    public decimal Amount { get; set; }
-
     public required string JobId { get; set; }
 
     public int CalculationUnitIndex { get; set; }

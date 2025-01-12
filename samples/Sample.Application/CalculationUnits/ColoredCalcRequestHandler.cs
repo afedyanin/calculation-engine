@@ -23,14 +23,18 @@ internal class ColoredCalcRequestHandler : IRequestHandler<ColoredCalcRequest>
 
     public async Task Handle(ColoredCalcRequest request, CancellationToken cancellationToken)
     {
-        // Get CalculationUnit context
-        var calulationUnitId = request.CalculationUnitId;
+        var calculationUnitId = request.CalculationUnitId;
+        var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
-        var calulationUnit = await _calculationUnitRepository.GetById(calulationUnitId)
-            ?? throw new InvalidOperationException($"Cannot find calculation unit with id={calulationUnitId}");
+        var calculationUnit = await GetCalculationUnitWithJobId(calculationUnitId, cts.Token);
 
-        // It is normal we don't have JobId yet.
-        var jobId = calulationUnit.JobId ?? "Unassigned yet.";
+        if (calculationUnit == null)
+        {
+            _logger.LogError($"Cannot find calculation unit with id={calculationUnitId}");
+            return;
+        }
+
+        var jobId = calculationUnit.JobId!;
         _logger.LogInformation($"Start executing Job={jobId}");
 
         // Emulate work
@@ -42,19 +46,50 @@ internal class ColoredCalcRequestHandler : IRequestHandler<ColoredCalcRequest>
             CreatedDate = DateTime.UtcNow,
             Color = request.Color,
             JobId = jobId,
-            Name = $"Some result for {calulationUnit.Id}",
+            Name = $"Some result for {calculationUnitId}",
         };
 
         // Save result
         var result = new CalculationResultItem
         {
             Id = Guid.NewGuid(),
-            CalculationUnitId = calulationUnitId,
+            CalculationUnitId = calculationUnitId,
             Content = reportData,
         };
 
         await _calculationResultRepository.Insert(result);
 
         _logger.LogInformation($"End executing Job={jobId}");
+    }
+
+    // Hangfire агент может стартовать выполнение джобы до того, как обновится объект CaclulationUnit в БД
+    // в этом случае плде JobId будет не заполненным.
+    // Метод ожидает присвоения JobId
+    private async Task<CalculationUnit?> GetCalculationUnitWithJobId(Guid calculationUnitId, CancellationToken cancellationToken = default)
+    {
+        var calulationUnit = await _calculationUnitRepository.GetById(calculationUnitId);
+
+        if (calulationUnit == null)
+        {
+            // Not found
+            return null;
+        };
+
+        var jobId = calulationUnit.JobId ?? string.Empty;
+
+        while (string.IsNullOrEmpty(jobId))
+        {
+            await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+
+            calulationUnit = await _calculationUnitRepository.GetById(calculationUnitId);
+            jobId = calulationUnit!.JobId ?? string.Empty;
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return calulationUnit;
+            }
+        }
+
+        return calulationUnit;
     }
 }
