@@ -37,6 +37,7 @@ internal class JobAwaitingHandler : IRequestHandler<JobAwaitingRequest>
         }
 
         var jobIds = string.Join(',', request.JobIds);
+        _logger.LogDebug($"Start waiting for jobs completed. JobIds=[{jobIds}]");
 
         while (!AllJobsCompleted(request.JobIds))
         {
@@ -46,9 +47,10 @@ internal class JobAwaitingHandler : IRequestHandler<JobAwaitingRequest>
                 break;
             }
 
-            _logger.LogInformation($"Start waiting for jobs completed. JobIds=[{jobIds}]");
+            _logger.LogDebug($"Continue waiting for jobs completed. JobIds=[{jobIds}]");
             await Task.Delay(request.PoolingInterval, cancellationToken);
         }
+
         _logger.LogInformation($"End waiting for jobs completed. JobIds=[{jobIds}]. Proceed to next job.");
     }
 
@@ -90,6 +92,6 @@ internal class JobAwaitingHandler : IRequestHandler<JobAwaitingRequest>
             return false;
         }
 
-        return true;
+        return isCompleted;
     }
 }

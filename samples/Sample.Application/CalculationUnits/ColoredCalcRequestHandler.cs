@@ -31,7 +31,7 @@ internal class ColoredCalcRequestHandler : IRequestHandler<ColoredCalcRequest>
 
         // It is normal we don't have JobId yet.
         var jobId = calulationUnit.JobId ?? "Unassigned yet.";
-        _logger.LogDebug($"Start executing Job={jobId}");
+        _logger.LogInformation($"Start executing Job={jobId}");
 
         // Emulate work
         await Task.Delay(request.Delay);
@@ -55,6 +55,6 @@ internal class ColoredCalcRequestHandler : IRequestHandler<ColoredCalcRequest>
 
         await _calculationResultRepository.Insert(result);
 
-        _logger.LogDebug($"End executing Job={jobId}");
+        _logger.LogInformation($"End executing Job={jobId}");
     }
 }
