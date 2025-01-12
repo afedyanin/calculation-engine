@@ -57,7 +57,10 @@ internal class EnqueueReportHandler : IRequestHandler<EnqueueReportRequest, Enqu
 
     private CalculationGraph CreateCalculationGraph(out Guid reportResultUnitId)
     {
-        var graph = new CalculationGraph();
+        var graph = new CalculationGraph()
+        {
+            Id = Guid.NewGuid(),
+        };
 
         var v0 = graph.AddCalculationVertex(CreateRequest("Blue"));
         var v1 = graph.AddCalculationVertex(CreateRequest("Red"));

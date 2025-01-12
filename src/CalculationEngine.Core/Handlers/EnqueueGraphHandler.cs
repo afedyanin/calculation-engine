@@ -4,6 +4,7 @@ using CalculationEngine.Core.Repositories;
 using CalculationEngine.Graphlib;
 using CalculationEngine.Graphlib.Algos;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace CalculationEngine.Core.Handlers;
 
@@ -12,26 +13,29 @@ internal class EnqueueGraphHandler : IRequestHandler<EnqueueGraphRequest>
     private readonly IJobScheduler _jobScheduler;
     private readonly ICalculationGraphRepository _calculationGraphRepository;
     private readonly ICalculationUnitRepository _calculationUnitRepository;
+    private readonly ILogger<EnqueueGraphHandler> _logger;
 
     public EnqueueGraphHandler(
         IJobScheduler jobScheduler,
         ICalculationGraphRepository calculationGraphRepository,
-        ICalculationUnitRepository calculationUnitRepository)
+        ICalculationUnitRepository calculationUnitRepository,
+        ILogger<EnqueueGraphHandler> logger)
     {
         _jobScheduler = jobScheduler;
         _calculationGraphRepository = calculationGraphRepository;
         _calculationUnitRepository = calculationUnitRepository;
+        _logger = logger;
     }
 
     public async Task Handle(EnqueueGraphRequest request, CancellationToken cancellationToken)
     {
         var graph = await _calculationGraphRepository.GetById(request.GraphId);
 
-        var errorResponse = Validate(graph);
+        var errorMessage = Validate(graph);
 
-        if (errorResponse != null)
+        if (errorMessage != null)
         {
-            // TODO: Log eror
+            _logger.LogError($"Error: {errorMessage}");
             return;
         }
 
@@ -49,13 +53,7 @@ internal class EnqueueGraphHandler : IRequestHandler<EnqueueGraphRequest>
         }
 
         var jobIds = string.Join(',', jobs);
-
-        // TODO: Log Success
-        var response = new EnqueueGraphResponse()
-        {
-            Success = true,
-            Message = $"Graph enqueued. Jobs=[{jobIds}]",
-        };
+        _logger.LogInformation($"GraphId={request.GraphId} enqueued. Jobs=[{jobIds}]");
     }
 
     private async Task<string> EnqueueVertex(
@@ -93,24 +91,16 @@ internal class EnqueueGraphHandler : IRequestHandler<EnqueueGraphRequest>
         return _jobScheduler.EnqueueAfter(awatingJobId, vertex.Value.Request);
     }
 
-    private EnqueueGraphResponse? Validate(CalculationGraph? graph)
+    private string? Validate(CalculationGraph? graph)
     {
         if (graph == null)
         {
-            return new EnqueueGraphResponse
-            {
-                Success = false,
-                Message = $"Cannot find graph with specified GraphId."
-            };
+            return $"Cannot find graph with specified GraphId.";
         }
 
         if (graph.HasAnyCycle())
         {
-            return new EnqueueGraphResponse
-            {
-                Success = false,
-                Message = $"Cannot enqueue graph with cycles. GraphId={graph.Id}"
-            };
+            return $"Cannot enqueue graph with cycles. GraphId={graph.Id}";
         }
 
         return null;

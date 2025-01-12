@@ -7,7 +7,8 @@ using CalculationEngine.Core.Repositories;
 using CalculationEngine.Core.Tests.HangfireExtensions;
 using CalculationEngine.Core.Tests.Stubs;
 using CalculationEngine.Graphlib.Algos;
-
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 
 namespace CalculationEngine.Core.Tests.Handlers;
@@ -47,10 +48,13 @@ public class EnqueueGraphHandlerTests
     [Test]
     public async Task CanEnqueueGraph()
     {
+        var logger = NullLoggerFactory.Instance.CreateLogger<EnqueueGraphHandler>();
+
         var handler = new EnqueueGraphHandler(
             _jobScheduler,
             _graphRepository!,
-            _calculationUnitRepository!);
+            _calculationUnitRepository!,
+            logger);
 
         await handler.Handle(new EnqueueGraphRequest(), CancellationToken.None);
 
