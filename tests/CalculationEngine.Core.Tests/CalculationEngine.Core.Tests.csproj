@@ -33,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\samples\Sample.Application\Sample.Application.csproj" />
     <ProjectReference Include="..\..\src\CalculationEngine.Core\CalculationEngine.Core.csproj" />
     <ProjectReference Include="..\..\src\CalculationEngine.Graphlib\CalculationEngine.Graphlib.csproj" />
   </ItemGroup>

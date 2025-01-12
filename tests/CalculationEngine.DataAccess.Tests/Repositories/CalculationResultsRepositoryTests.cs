@@ -1,4 +1,5 @@
 using CalculationEngine.Core.Model;
+using Sample.Application.ReportModel;
 
 namespace CalculationEngine.DataAccess.Tests.Repositories;
 
@@ -59,5 +60,18 @@ public class CalculationResultsRepositoryTests : DbTestBase
         var loaded = await CalculationResultRepository.GetById(result.Id);
         Assert.That(loaded, Is.Not.Null);
         Assert.That(loaded.Name, Is.EqualTo(restored.Name));
+    }
+
+    [TestCase("800e79b2-d6cc-4f3e-9603-b5ef4c69e1ec")]
+    public async Task CanLoadReportResult(string resultItemId)
+    {
+        var id = new Guid(resultItemId);
+        var item = await CalculationResultRepository.GetById(id);
+        Assert.That(item, Is.Not.Null);
+
+        var typed = item.Content as ReportDataItem;
+        Assert.That(typed, Is.Not.Null);
+
+        Console.WriteLine($"Color={typed.Color}");
     }
 }

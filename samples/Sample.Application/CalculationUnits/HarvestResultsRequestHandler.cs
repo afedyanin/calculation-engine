@@ -2,6 +2,7 @@ using CalculationEngine.Core.Model;
 using CalculationEngine.Core.Repositories;
 using CalculationEngine.Graphlib.Algos;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Sample.Application.ReportModel;
 
 namespace Sample.Application.CalculationUnits;
@@ -11,15 +12,18 @@ public class HarvestResultsRequestHandler : IRequestHandler<HarvestResultsReques
     private readonly ICalculationUnitRepository _calculationUnitRepository;
     private readonly ICalculationResultRepository _calculationResultRepository;
     private readonly ICalculationGraphRepository _calculationGraphRepository;
+    private readonly ILogger<HarvestResultsRequestHandler> _logger;
 
     public HarvestResultsRequestHandler(
         ICalculationResultRepository calculationResultRepository,
         ICalculationUnitRepository calculationUnitRepository,
-        ICalculationGraphRepository calculationGraphRepository)
+        ICalculationGraphRepository calculationGraphRepository,
+        ILogger<HarvestResultsRequestHandler> logger)
     {
         _calculationResultRepository = calculationResultRepository;
         _calculationUnitRepository = calculationUnitRepository;
         _calculationGraphRepository = calculationGraphRepository;
+        _logger = logger;
     }
 
     public async Task Handle(HarvestResultsRequest request, CancellationToken cancellationToken)
@@ -27,12 +31,24 @@ public class HarvestResultsRequestHandler : IRequestHandler<HarvestResultsReques
         // Get CalculationUnit context
         var calulationUnitId = request.CalculationUnitId;
 
-        var calulationUnit = await _calculationUnitRepository.GetById(calulationUnitId)
-            ?? throw new InvalidOperationException($"Cannot find calculation unit with id={calulationUnitId}");
+        var calulationUnit = await _calculationUnitRepository.GetById(calulationUnitId);
+
+        if (calulationUnit == null)
+        {
+            _logger.LogError($"Cannot find calculation unit with id={calulationUnitId}");
+            // TODO: Save error result
+            return;
+        }
 
         // Load graph
-        var graph = await _calculationGraphRepository.GetById(calulationUnit.GraphId)
-            ?? throw new InvalidOperationException($"Cannot find graph with id={calulationUnit.GraphId}");
+        var graph = await _calculationGraphRepository.GetById(calulationUnit.GraphId);
+
+        if (graph == null)
+        {
+            _logger.LogError($"Cannot find graph with id={calulationUnit.GraphId}");
+            // TODO: Save error result
+            return;
+        }
 
         var results = new List<ReportDataItem>();
 
@@ -48,6 +64,7 @@ public class HarvestResultsRequestHandler : IRequestHandler<HarvestResultsReques
 
                 if (reportDataItem == null)
                 {
+                    _logger.LogError($"Cannot parse content for ResultItemId={item.Id} ContentType={item.ContentType}");
                     continue;
                 }
 
@@ -62,8 +79,9 @@ public class HarvestResultsRequestHandler : IRequestHandler<HarvestResultsReques
             Id = Guid.NewGuid(),
             CalculationUnitId = calulationUnitId,
             Content = results.ToArray(),
+            Name = "Report Results"
         };
-
+        _logger.LogInformation($"Saving report result for graphId={graph.Id}. DataItemsCount={results.Count}");
         await _calculationResultRepository.Insert(result);
     }
 }

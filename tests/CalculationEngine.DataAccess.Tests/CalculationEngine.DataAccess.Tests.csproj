@@ -31,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\samples\Sample.Application\Sample.Application.csproj" />
     <ProjectReference Include="..\..\src\CalculationEngine.DataAccess\CalculationEngine.DataAccess.csproj" />
   </ItemGroup>
 
