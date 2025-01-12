@@ -35,26 +35,25 @@ internal class ColoredCalcRequestHandler : IRequestHandler<ColoredCalcRequest>
         }
 
         var jobId = calculationUnit.JobId!;
+
         _logger.LogInformation($"Start executing Job={jobId}");
 
         // Emulate work
         await Task.Delay(request.Delay);
 
-        // Create Report Result
-        var reportData = new ReportDataItem
-        {
-            CreatedDate = DateTime.UtcNow,
-            Color = request.Color,
-            JobId = jobId,
-            Name = $"Some result for {calculationUnitId}",
-        };
-
-        // Save result
+        // Create and Save Report Result
         var result = new CalculationResultItem
         {
             Id = Guid.NewGuid(),
             CalculationUnitId = calculationUnitId,
-            Content = reportData,
+            Name = $"Calculation result for {request.Color} request.",
+            Content = new ReportDataItem
+            {
+                CreatedDate = DateTime.UtcNow,
+                Color = request.Color,
+                JobId = jobId,
+                Name = $"Some content of result for {calculationUnitId}",
+            },
         };
 
         await _calculationResultRepository.Insert(result);
