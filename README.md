@@ -66,4 +66,72 @@
 
 ## Пример использования
 
+В [примере]() реализован граф вычислений, представленный на картинке:
+
+![sample](Graph002.png)
+
+### Рендер графа и джобов, соответствующих вершинам
+
+``` shell
+Vertices:
+	[] -> 6
+	[] -> 5
+	[5,6] -> 7
+	[] -> 1
+	[] -> 0
+	[0,1,7] -> 2
+	[2] -> 4
+	[2] -> 3
+	[3,4] -> 8
+	[5,8] -> 9
+
+GraphId=9b818158-90f6-41ca-bb99-5b9321e957b9 enqueued. Jobs=[481,482,484,485,486,488,489,490,492,494]
+Job schedule for GraphId=9b818158-90f6-41ca-bb99-5b9321e957b9: Jobs:
+	[] -> 481
+	[] -> 482
+	[482,481] -> 484
+	[] -> 485
+	[] -> 486
+	[486,485,484] -> 488
+	[488] -> 489
+	[488] -> 490
+	[490,489] -> 492
+	[482,492] -> 494
+```
+
+
+## Лог выполнения графа hangfire агентом:
+
+``` shell
+Start executing Job=481
+Enqueued awatingJobId=483 parentJobIds=[482,481]
+Start executing Job=482
+Start executing Job=485
+Enqueued awatingJobId=487 parentJobIds=[486,485,484]
+Start executing Job=486
+Enqueued awatingJobId=491 parentJobIds=[490,489]
+Enqueued awatingJobId=493 parentJobIds=[482,492]
+End executing Job=481
+End executing Job=482
+End waiting for jobs completed. JobIds=[482,481]. Proceed to next job.
+Start executing Job=484
+End executing Job=485
+End executing Job=486
+End executing Job=484
+End waiting for jobs completed. JobIds=[486,485,484]. Proceed to next job.
+Start executing Job=488
+End executing Job=488
+Start executing Job=489
+Start executing Job=490
+End executing Job=489
+End executing Job=490
+End waiting for jobs completed. JobIds=[490,489]. Proceed to next job.
+Start executing Job=492
+End executing Job=492
+End waiting for jobs completed. JobIds=[482,492]. Proceed to next job.
+Saving report result for graphId=9b818158-90f6-41ca-bb99-5b9321e957b9. DataItemsCount=9
+```
+
+
+
 
