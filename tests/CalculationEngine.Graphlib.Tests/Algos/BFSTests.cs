@@ -31,4 +31,15 @@ public class BFSTests
         Assert.That(actual, Is.EquivalentTo(expected));
     }
 
+    [TestCase(0, "0,2,3,4,8,9")]
+    [TestCase(1, "1,2,3,4,8,9")]
+    [TestCase(6, "6,7,2,3,4,8,9")]
+    [TestCase(5, "5,7,9,2,3,4,8")]
+    public void CanPerformBFSForComplexGraph(int startIndex, string expected)
+    {
+        var graph = GraphFactory.CreateComplexGraph();
+        var vertices = graph.BFS(startIndex);
+        var actual = string.Join(',', vertices.Select(v => v.Index).ToArray());
+        Assert.That(actual, Is.EqualTo(expected));
+    }
 }

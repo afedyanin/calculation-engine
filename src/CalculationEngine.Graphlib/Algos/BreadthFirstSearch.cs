@@ -2,9 +2,9 @@ namespace CalculationEngine.Graphlib.Algos;
 public static class BreadthFirstSearch
 {
     // Breadth First Search (BFS)
-    public static List<Vertex<T>> BFS<T>(this Graph<T> graph) where T : class
+    public static List<Vertex<T>> BFS<T>(this Graph<T> graph, int startIndex = 0) where T : class
     {
-        return graph.BFS(graph.Vertices[0]);
+        return graph.BFS(graph.Vertices[startIndex]);
     }
 
     private static List<Vertex<T>> BFS<T>(

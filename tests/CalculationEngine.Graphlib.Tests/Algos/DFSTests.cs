@@ -31,4 +31,15 @@ public class DFSTests
         Assert.That(actual, Is.EquivalentTo(expected));
     }
 
+    [TestCase(0, "0,2,3,8,9,4")]
+    [TestCase(1, "1,2,3,8,9,4")]
+    [TestCase(6, "6,7,2,3,8,9,4")]
+    [TestCase(5, "5,7,2,3,8,9,4")]
+    public void CanPerformDFSForComplexGraph(int startIndex, string expected)
+    {
+        var graph = GraphFactory.CreateComplexGraph();
+        var vertices = graph.DFS(startIndex);
+        var actual = string.Join(',', vertices.Select(v => v.Index).ToArray());
+        Assert.That(actual, Is.EqualTo(expected));
+    }
 }

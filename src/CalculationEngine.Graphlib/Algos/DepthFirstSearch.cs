@@ -3,13 +3,13 @@ namespace CalculationEngine.Graphlib.Algos;
 public static class DepthFirstSearch
 {
     // Depth First Traversal (DFS)
-    public static List<Vertex<T>> DFS<T>(this Graph<T> graph) where T : class
+    public static List<Vertex<T>> DFS<T>(this Graph<T> graph, int startIndex = 0) where T : class
     {
         var count = graph.Vertices.Count;
         var visited = new bool[count];
         var result = new List<Vertex<T>>(count);
 
-        graph.DFS(graph.Vertices[0], visited, result);
+        graph.DFS(graph.Vertices[startIndex], visited, result);
 
         return result;
     }
