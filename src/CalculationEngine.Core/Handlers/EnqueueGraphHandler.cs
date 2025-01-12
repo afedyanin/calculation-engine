@@ -7,7 +7,7 @@ using MediatR;
 
 namespace CalculationEngine.Core.Handlers;
 
-internal class EnqueueGraphHandler : IRequestHandler<EnqueueGraphRequest, EnqueueGraphResponse>
+internal class EnqueueGraphHandler : IRequestHandler<EnqueueGraphRequest>
 {
     private readonly IJobScheduler _jobScheduler;
     private readonly ICalculationGraphRepository _calculationGraphRepository;
@@ -23,7 +23,7 @@ internal class EnqueueGraphHandler : IRequestHandler<EnqueueGraphRequest, Enqueu
         _calculationUnitRepository = calculationUnitRepository;
     }
 
-    public async Task<EnqueueGraphResponse> Handle(EnqueueGraphRequest request, CancellationToken cancellationToken)
+    public async Task Handle(EnqueueGraphRequest request, CancellationToken cancellationToken)
     {
         var graph = await _calculationGraphRepository.GetById(request.GraphId);
 
@@ -31,7 +31,8 @@ internal class EnqueueGraphHandler : IRequestHandler<EnqueueGraphRequest, Enqueu
 
         if (errorResponse != null)
         {
-            return errorResponse;
+            // TODO: Log eror
+            return;
         }
 
         var jobs = new HashSet<string>();
@@ -48,13 +49,13 @@ internal class EnqueueGraphHandler : IRequestHandler<EnqueueGraphRequest, Enqueu
         }
 
         var jobIds = string.Join(',', jobs);
+
+        // TODO: Log Success
         var response = new EnqueueGraphResponse()
         {
             Success = true,
             Message = $"Graph enqueued. Jobs=[{jobIds}]",
         };
-
-        return response;
     }
 
     private async Task<string> EnqueueVertex(

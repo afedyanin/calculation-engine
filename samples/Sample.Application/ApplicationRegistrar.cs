@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CalculationEngine.AppDemo;
+namespace Sample.Application;
 
 public static class ApplicationRegistrar
 {

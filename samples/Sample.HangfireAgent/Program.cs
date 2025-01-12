@@ -1,6 +1,8 @@
 
+using CalculationEngine;
 using Hangfire;
 using Hangfire.PostgreSql;
+using Sample.Application;
 
 namespace Sample.HangfireAgent;
 
@@ -15,7 +17,8 @@ public class Program
             .UseSimpleAssemblyNameTypeSerializer()
             .UseRecommendedSerializerSettings()
             .UsePostgreSqlStorage(c =>
-                c.UseNpgsqlConnection(builder.Configuration.GetConnectionString("HangfireConnection"))));
+                c.UseNpgsqlConnection(
+                    builder.Configuration.GetConnectionString("HangfireConnection"))));
 
         builder.Services.AddHangfireServer(options =>
         {
@@ -23,9 +26,10 @@ public class Program
             options.ShutdownTimeout = TimeSpan.FromSeconds(30);
         });
 
-        // Add Mediator Stuff Here
-        //builder.Services.AddAppDemo();
-        //builder.Services.AddCalculationEngine();
+        builder.Services.AddCalculationEngine(
+            builder.Configuration.GetConnectionString("CalculationEngineConnection"));
+
+        builder.Services.AddSampleApp();
 
         var app = builder.Build();
 

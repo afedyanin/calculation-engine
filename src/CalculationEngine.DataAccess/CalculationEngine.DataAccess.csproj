@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="CalculationEngine.DataAccess.Tests" />
+    <InternalsVisibleTo Include="CalculationEngine" />
   </ItemGroup>
   
   <ItemGroup>
