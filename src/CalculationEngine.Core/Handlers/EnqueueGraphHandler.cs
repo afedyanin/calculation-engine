@@ -1,3 +1,4 @@
+using System.Text;
 using CalculationEngine.Core.HangfireExtensions;
 using CalculationEngine.Core.Model;
 using CalculationEngine.Core.Repositories;
@@ -46,14 +47,20 @@ internal class EnqueueGraphHandler : IRequestHandler<EnqueueGraphRequest>
         foreach (var vertex in sortedVertices)
         {
             var jobId = await EnqueueVertex(vertex, allParents[vertex.Index]);
-            jobs.Add(jobId);
-
             vertex.Value.JobId = jobId;
             await _calculationUnitRepository.Update(vertex.Value, cancellationToken);
+
+            jobs.Add(jobId);
         }
 
         var jobIds = string.Join(',', jobs);
+
         _logger.LogInformation($"GraphId={request.GraphId} enqueued. Jobs=[{jobIds}]");
+
+        // Dump job schedule
+        var updatedGraph = await _calculationGraphRepository.GetById(graph!.Id);
+        var jobSchedule = DumpJobs(updatedGraph!);
+        _logger.LogInformation($"Job schedule for GraphId={request.GraphId}: {jobSchedule}");
     }
 
     private async Task<string> EnqueueVertex(
@@ -88,6 +95,9 @@ internal class EnqueueGraphHandler : IRequestHandler<EnqueueGraphRequest>
         };
 
         var awatingJobId = _jobScheduler.Enqueue(awatingRequest);
+
+        _logger.LogInformation($"Enqueued awatingJobId={awatingJobId} parentJobIds=[{string.Join(',', parentJobIds)}]");
+
         return _jobScheduler.EnqueueAfter(awatingJobId, vertex.Value.Request);
     }
 
@@ -105,4 +115,32 @@ internal class EnqueueGraphHandler : IRequestHandler<EnqueueGraphRequest>
 
         return null;
     }
+
+    private static string DumpJobs(CalculationGraph graph)
+    {
+        var sb2 = new StringBuilder();
+        var sorted = graph.TopologicalSort();
+        var allParents = graph.GetParents();
+
+        sb2.AppendLine($"Jobs:");
+
+        foreach (var index in sorted.Select(x => x.Index))
+        {
+            var parents = allParents[index];
+
+            var jobId = graph.Vertices[index].Value.JobId;
+            if (parents != null)
+            {
+                var jobs = parents.Select(x => x.Value.JobId);
+                sb2.AppendLine($"[{string.Join(',', jobs)}] -> {jobId}");
+            }
+            else
+            {
+                sb2.AppendLine($"[] -> {jobId}");
+            }
+        }
+
+        return sb2.ToString();
+    }
+
 }

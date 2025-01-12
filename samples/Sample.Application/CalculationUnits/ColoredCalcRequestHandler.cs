@@ -1,6 +1,7 @@
 using CalculationEngine.Core.Model;
 using CalculationEngine.Core.Repositories;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Sample.Application.ReportModel;
 
 namespace Sample.Application.CalculationUnits;
@@ -8,33 +9,39 @@ internal class ColoredCalcRequestHandler : IRequestHandler<ColoredCalcRequest>
 {
     private readonly ICalculationUnitRepository _calculationUnitRepository;
     private readonly ICalculationResultRepository _calculationResultRepository;
+    private readonly ILogger<ColoredCalcRequestHandler> _logger;
 
     public ColoredCalcRequestHandler(
         ICalculationResultRepository calculationResultRepository,
-        ICalculationUnitRepository calculationUnitRepository)
+        ICalculationUnitRepository calculationUnitRepository,
+        ILogger<ColoredCalcRequestHandler> logger)
     {
         _calculationResultRepository = calculationResultRepository;
         _calculationUnitRepository = calculationUnitRepository;
+        _logger = logger;
     }
 
     public async Task Handle(ColoredCalcRequest request, CancellationToken cancellationToken)
     {
-        // Emulate work
-        await Task.Delay(request.Delay);
-
         // Get CalculationUnit context
         var calulationUnitId = request.CalculationUnitId;
 
         var calulationUnit = await _calculationUnitRepository.GetById(calulationUnitId)
             ?? throw new InvalidOperationException($"Cannot find calculation unit with id={calulationUnitId}");
 
-        // Create Report Resul
+        // It is normal we don't have JobId yet.
+        var jobId = calulationUnit.JobId ?? "Unassigned yet.";
+        _logger.LogDebug($"Start executing Job={jobId}");
 
+        // Emulate work
+        await Task.Delay(request.Delay);
+
+        // Create Report Result
         var reportData = new ReportDataItem
         {
             CreatedDate = DateTime.UtcNow,
             Color = request.Color,
-            JobId = calulationUnit.JobId ?? "None",
+            JobId = jobId,
             Name = $"Some result for {calulationUnit.Id}",
         };
 
@@ -47,5 +54,7 @@ internal class ColoredCalcRequestHandler : IRequestHandler<ColoredCalcRequest>
         };
 
         await _calculationResultRepository.Insert(result);
+
+        _logger.LogDebug($"End executing Job={jobId}");
     }
 }

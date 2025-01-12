@@ -32,21 +32,24 @@ internal class JobAwaitingHandler : IRequestHandler<JobAwaitingRequest>
     {
         if (request.JobIds.Length == 0)
         {
-            // Nothing to wait
+            _logger.LogError($"Awating job has no any job to wait. CalculationUnitId={request.CalculationUnitId}");
             return;
         }
+
+        var jobIds = string.Join(',', request.JobIds);
 
         while (!AllJobsCompleted(request.JobIds))
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                _logger.LogWarning($"Cancel waiting for jobs completed. JobIds={string.Join(',', request.JobIds)} CorrelationId={request.CalculationUnitId}");
+                _logger.LogWarning($"Cancel waiting for jobs completed. JobIds=[{jobIds}]");
                 break;
             }
 
-            _logger.LogDebug($"Waiting for jobs completed. JobIds={string.Join(',', request.JobIds)} CorrelationId={request.CalculationUnitId}");
+            _logger.LogInformation($"Start waiting for jobs completed. JobIds=[{jobIds}]");
             await Task.Delay(request.PoolingInterval, cancellationToken);
         }
+        _logger.LogInformation($"End waiting for jobs completed. JobIds=[{jobIds}]. Proceed to next job.");
     }
 
     private bool AllJobsCompleted(string[] jobIds)
