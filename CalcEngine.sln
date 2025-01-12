@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{9C8591
 		BACKLOG.md = BACKLOG.md
 		Glossary.md = Glossary.md
 		Graph001.png = Graph001.png
+		Graph002.png = Graph002.png
 		Hosts.png = Hosts.png
 		README.md = README.md
 	EndProjectSection
