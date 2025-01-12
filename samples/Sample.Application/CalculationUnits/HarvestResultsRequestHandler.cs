@@ -52,9 +52,9 @@ public class HarvestResultsRequestHandler : IRequestHandler<HarvestResultsReques
 
         var results = new List<ReportDataItem>();
 
-        // Проходим по всем вершинам графа, например, в глубину
+        // Проходим по всем вершинам графа
         // и собираем результаты вычислений
-        foreach (var vertex in graph.DFS())
+        foreach (var vertex in graph.Vertices)
         {
             var unitResults = await _calculationResultRepository.GetByCalculationUnitId(vertex.Value.Id);
 
