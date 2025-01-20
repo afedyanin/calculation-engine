@@ -40,6 +40,32 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Application", "sampl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculationEngine", "src\CalculationEngine\CalculationEngine.csproj", "{C71872AB-B23E-4B2A-BB09-4C065C46A7FE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{7D8757F5-C641-4740-ABD4-818E7EBCC2E9}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\create_hf_db.sql = scripts\create_hf_db.sql
+		scripts\Install.v10.sql = scripts\Install.v10.sql
+		scripts\Install.v11.sql = scripts\Install.v11.sql
+		scripts\Install.v12.sql = scripts\Install.v12.sql
+		scripts\Install.v13.sql = scripts\Install.v13.sql
+		scripts\Install.v14.sql = scripts\Install.v14.sql
+		scripts\Install.v15.sql = scripts\Install.v15.sql
+		scripts\Install.v16.sql = scripts\Install.v16.sql
+		scripts\Install.v17.sql = scripts\Install.v17.sql
+		scripts\Install.v18.sql = scripts\Install.v18.sql
+		scripts\Install.v19.sql = scripts\Install.v19.sql
+		scripts\Install.v20.sql = scripts\Install.v20.sql
+		scripts\Install.v21.sql = scripts\Install.v21.sql
+		scripts\Install.v22.sql = scripts\Install.v22.sql
+		scripts\Install.v23.sql = scripts\Install.v23.sql
+		scripts\Install.v3.sql = scripts\Install.v3.sql
+		scripts\Install.v4.sql = scripts\Install.v4.sql
+		scripts\Install.v5.sql = scripts\Install.v5.sql
+		scripts\Install.v6.sql = scripts\Install.v6.sql
+		scripts\Install.v7.sql = scripts\Install.v7.sql
+		scripts\Install.v8.sql = scripts\Install.v8.sql
+		scripts\Install.v9.sql = scripts\Install.v9.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

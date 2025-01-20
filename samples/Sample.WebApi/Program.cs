@@ -20,10 +20,13 @@ public class Program
             .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
             .UseSimpleAssemblyNameTypeSerializer()
             .UseRecommendedSerializerSettings()
-            .UsePostgreSqlStorage(c =>
-                c.UseNpgsqlConnection(
-                    builder.Configuration.GetConnectionString("HangfireConnection"))));
-
+            .UsePostgreSqlStorage(
+                c => c.UseNpgsqlConnection(builder.Configuration.GetConnectionString("HangfireConnection"))
+//                , new PostgreSqlStorageOptions
+//                {
+//                    PrepareSchemaIfNecessary = false,
+//                }
+        ));
 
         builder.Services.AddCalculationEngine(
             builder.Configuration.GetConnectionString("CalculationEngineConnection"));

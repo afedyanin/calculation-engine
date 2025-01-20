@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Vertr.CalculationEngine</id>
+    <version>1.0.0</version>
+    <title>Distributed calculation engine</title>
+    <authors>CalculationEngine</authors>
+    <license type="file">LICENSE</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <readme>README.md</readme>
+    <projectUrl>https://github.com/afedyanin/calculation-engine</projectUrl>
+    <description>Package Description</description>
+    <tags>distributed-computing hangfire mediatr</tags>
+    <repository type="git" url="https://github.com/afedyanin/calculation-engine" commit="daf188b6dfdeb20f0900c2bae82fb8b6375dd60c" />
+    <dependencies>
+      <group targetFramework="net8.0">
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\A\Documents\GitHub\hf-demo\src\CalculationEngine\bin\Release\net8.0\CalculationEngine.dll" target="lib\net8.0\CalculationEngine.dll" />
+    <file src="C:\Users\A\Documents\GitHub\hf-demo\src\CalculationEngine\bin\Release\net8.0\CalculationEngine.Core.dll" target="lib\net8.0\CalculationEngine.Core.dll" />
+    <file src="C:\Users\A\Documents\GitHub\hf-demo\src\CalculationEngine\bin\Release\net8.0\CalculationEngine.DataAccess.dll" target="lib\net8.0\CalculationEngine.DataAccess.dll" />
+    <file src="C:\Users\A\Documents\GitHub\hf-demo\src\CalculationEngine\bin\Release\net8.0\CalculationEngine.Graphlib.dll" target="lib\net8.0\CalculationEngine.Graphlib.dll" />
+    <file src="C:\Users\A\Documents\GitHub\hf-demo\LICENSE" target="\LICENSE" />
+    <file src="C:\Users\A\Documents\GitHub\hf-demo\README.md" target="\README.md" />
+  </files>
+</package>

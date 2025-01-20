@@ -1,3 +1,19 @@
+# 2025-01-20
+
+## dotnet pack include ref projects
+
+- https://dev.to/yerac/include-both-nuget-package-references-and-project-reference-dll-using-dotnet-pack-2d8p
+- https://josef.codes/dotnet-pack-include-referenced-projects/
+
+```pshell
+dotnet pack -c Release -p:NuspecFile=Vertr.CalculationEngine.1.0.0.nuspec
+
+```
+
+
+
+
+
 # 2025-01-11
 
 ## Moq

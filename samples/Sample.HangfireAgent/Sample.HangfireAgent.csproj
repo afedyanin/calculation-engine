@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\CalculationEngine\CalculationEngine.csproj" />
     <ProjectReference Include="..\Sample.Application\Sample.Application.csproj" />
   </ItemGroup>
 
