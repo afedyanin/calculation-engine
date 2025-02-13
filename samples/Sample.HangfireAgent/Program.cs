@@ -18,15 +18,21 @@ public class Program
             .UseRecommendedSerializerSettings()
             .UsePostgreSqlStorage(
                 c => c.UseNpgsqlConnection(builder.Configuration.GetConnectionString("HangfireConnection"))
-//                , new PostgreSqlStorageOptions
-//                {
-//                    PrepareSchemaIfNecessary = false,
-//                }
+                , new PostgreSqlStorageOptions
+                {
+                    PrepareSchemaIfNecessary = true,
+                    QueuePollInterval = TimeSpan.FromSeconds(5),
+                    InvisibilityTimeout = TimeSpan.FromHours(24),
+                    JobExpirationCheckInterval = TimeSpan.FromHours(24),
+                }
         ));
 
         builder.Services.AddHangfireServer(options =>
         {
             options.StopTimeout = TimeSpan.FromSeconds(15);
+            options.WorkerCount = 1;
+            options.SchedulePollingInterval = TimeSpan.FromSeconds(5);
+            options.HeartbeatInterval = TimeSpan.FromSeconds(10);
             options.ShutdownTimeout = TimeSpan.FromSeconds(30);
         });
 

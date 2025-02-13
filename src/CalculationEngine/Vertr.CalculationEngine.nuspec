@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>Vertr.CalculationEngine</id>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
     <title>Distributed calculation engine</title>
     <authors>CalculationEngine</authors>
     <license type="file">LICENSE</license>
@@ -14,6 +14,11 @@
     <repository type="git" url="https://github.com/afedyanin/calculation-engine" commit="daf188b6dfdeb20f0900c2bae82fb8b6375dd60c" />
     <dependencies>
       <group targetFramework="net8.0">
+        <dependency id="Microsoft.EntityFrameworkCore" version="9.0.0" />
+        <dependency id="Npgsql.EntityFrameworkCore.PostgreSQL" version="9.0.2" />
+        <dependency id="Hangfire.Core" version="1.8.17" />
+        <dependency id="MediatR" version="12.4.1" />
+        <dependency id="Microsoft.Extensions.Logging.Abstractions" version="9.0.0" />
       </group>
     </dependencies>
   </metadata>

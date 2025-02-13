@@ -6,7 +6,7 @@
 - https://josef.codes/dotnet-pack-include-referenced-projects/
 
 ```pshell
-dotnet pack -c Release -p:NuspecFile=Vertr.CalculationEngine.1.0.0.nuspec
+dotnet pack -c Release -p:NuspecFile=Vertr.CalculationEngine.nuspec
 
 ```
 
